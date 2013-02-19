@@ -1,12 +1,12 @@
 {
-  "name": "application-name",
-  "version": "0.0.1",
+  "name": "shippable-api",
+  "version": "0.1.0",
   "private": true,
   "scripts": {
-    "start": "node app"
+    "start": "node app",
+    "test": ""
   },
   "dependencies": {
-    "express": "3.0.5",
-    "jade": "*"
+    "express": "3.0.5"
   }
 }
