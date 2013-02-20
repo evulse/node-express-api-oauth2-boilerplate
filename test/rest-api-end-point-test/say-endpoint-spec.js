@@ -57,9 +57,12 @@ vows
         },
         "the web service should return XML resource representation":
           function (error, response, body) {
-            console.log(body);
+            console.log(response.headers['content-type']);
             assert.isNull(error);
             assert.equal(response.statusCode, 200);
+            // should return JSON response
+            assert.strictEqual(response.headers['content-type'] ===
+              'application/xml', true);
           }
       }
     }
