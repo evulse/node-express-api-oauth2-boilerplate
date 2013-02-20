@@ -5,7 +5,7 @@
 
 var
   express = require('express'),
-  XMLWriter = require('xml-writer');
+  easyxml = require('easyxml');
 
 var app = express();
 
@@ -45,7 +45,7 @@ app.use(function (req, res, next) {
 
   // respond with json
   if (req.accepts('json')) {
-  res.send({error: 'Not found'});
+    res.send({error: 'Not found'});
     return;
   }
 });
@@ -86,14 +86,8 @@ app.get('/say/:name.:format?', function (request, response) {
   if (resourceType === 'json' || !resourceType) {
     response.json(200, {"name": name});
   } else if (resourceType === 'xml') {
-    var xmlWriter = new XMLWriter();
-    xmlWriter.startDocument()
-      .startElement('ShippableResponse')
-      .writeElement('name', name)
-      .endDocument();
-
     response.set('Content-Type', 'application/xml');
-    response.send(200, xmlWriter.toString());
+    response.send(200, easyxml.render({"name": name}));
   } else {
     response.json(406, {"message": "Unacceptable request"});
   }
