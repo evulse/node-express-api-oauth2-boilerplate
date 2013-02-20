@@ -12,7 +12,7 @@ var
  * Given there is API end point "/say/:name"
  * And the web service accept JSON and XML representation
  * When the web consumer request resources in JSON
- * The the web service should return JSON resource representation
+ * Then the web service should return JSON resource representation
  */
 vows
   .describe('Scenario: Retrieve JSON resource')
@@ -23,7 +23,10 @@ vows
         topic: function () {
           request({
             uri: 'http://localhost:5000/say/ghanoz.json',
-            method: 'GET'
+            method: 'GET',
+            headers: {
+              'Content-Type': 'application/json'
+            }
           }, this.callback);
         },
         "the web service should return JSON resource representation":
@@ -54,12 +57,14 @@ vows
         topic: function () {
           request({
             uri: 'http://localhost:5000/say/ghanoz.xml',
-            method: 'GET'
+            method: 'GET',
+            headers: {
+              'Content-Type': 'application/xml'
+            }
           }, this.callback);
         },
         "the web service should return XML resource representation":
           function (error, response, body) {
-            console.log(response.headers['content-type']);
             assert.isNull(error);
             assert.equal(response.statusCode, 200);
             // should return JSON response
@@ -77,7 +82,7 @@ vows
  * Given there is API end point "/say/:name"
  * And the web service accept JSON and XML representation
  * When the web consumer request resources in unknown resource format
- * The the web service should return HTTP 406 status code
+ * Then the web service should return HTTP 406 status code
  */
 vows
   .describe('Scenario: Not specified the resource format')
@@ -95,6 +100,8 @@ vows
           function (error, response, body) {
             assert.isNull(error);
             assert.equal(response.statusCode, 406);
+            assert.strictEqual(response.headers['content-type'] ===
+              'application/json; charset=utf-8', true);
           }
       }
     }
@@ -105,23 +112,25 @@ vows
  * Scenario: The request content format is not specified
  *
  * Given the web consumer is not specify the requested content format
- * Then the web service should return default HTTP 404 status code
+ * When the web consumer request resources
+ * Then the web service should return JSON resource representation
  */
 vows
   .describe('Scenario: The request content format is not specified')
   .addBatch({
   "\nGiven the web consumer is not specify the requested content format": {
-    topic: function () {
+    "\nWhen the web consumer request resources": {
+      topic: function () {
       request({
         uri: 'http://localhost:5000/say/ghanoz',
         method: 'GET'
       }, this.callback);
     },
-    "the web service should return default HTTP 404 status code":
+    "Then the web service should return JSON resource representation":
       function (error, response, body) {
-        console.log(body);
         assert.isNull(error);
-        assert.equal(response.statusCode, 404);
+        assert.equal(response.statusCode, 200);
       }
+    }
   }
 }).export(module);
