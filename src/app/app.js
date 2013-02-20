@@ -5,6 +5,7 @@
 
 var
   express = require('express'),
+  negotiate = require('express-negotiate'),
   XMLWriter = require('xml-writer');
 
 var app = express();
@@ -45,7 +46,7 @@ app.use(function (req, res, next) {
 
   // respond with json
   if (req.accepts('json')) {
-    res.send({error: 'Not found'});
+  res.send({error: 'Not found'});
     return;
   }
 });
@@ -55,7 +56,6 @@ app.use(function (req, res, next) {
 // arity of 4, aka the signature (err, req, res, next).
 // when connect has an error, it will invoke ONLY error-handling
 // middleware.
-
 // If we were to next() here any remaining non-error-handling
 // middleware would then be executed, or if we next(err) to
 // continue passing the error, only error-handling middleware
@@ -76,15 +76,15 @@ app.get('/', function (request, response) {
 
 // say api end points
 // GET say
-app.get('/say/:name.:format', function (request, response) {
-  console.log(request.params);
+app.get('/say/:name.:format?', function (request, response) {
+
   var resourceType = request.params.format;
   var name = request.params.name;
 
-  if (!name || !resourceType)
+  if (!name)
     response.json(400, {"message": "Required parameters should not be empty"});
 
-  if (resourceType === 'json') {
+  if (resourceType === 'json' || !resourceType) {
     response.json(200, {"name": name});
   } else if (resourceType === 'xml') {
     var xmlWriter = new XMLWriter();
