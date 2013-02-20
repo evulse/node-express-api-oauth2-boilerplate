@@ -30,6 +30,8 @@ vows
           function (error, response, body) {
             assert.isNull(error);
             assert.equal(response.statusCode, 200);
+            assert.strictEqual(response.headers['content-type'] ===
+              'application/json; charset=utf-8', true);
           }
       }
     }
