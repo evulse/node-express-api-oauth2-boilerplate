@@ -4,7 +4,8 @@
  */
 
 var
-  express = require('express');
+  express = require('express'),
+  XMLWriter = require('xml-writer');
 
 var app = express();
 
@@ -86,7 +87,14 @@ app.get('/say/:name.:format', function (request, response) {
   if (resourceType === 'json') {
     response.json(200, {"name": name});
   } else if (resourceType === 'xml') {
-    response.json(200, {"name": name});
+    var xmlWriter = new XMLWriter();
+    xmlWriter.startDocument()
+      .startElement('ShippableResponse')
+      .writeElement('name', name)
+      .endDocument();
+
+    response.set('Content-Type', 'application/xml');
+    response.send(200, xmlWriter.toString());
   } else {
     response.json(406, {"message": "Unacceptable request"});
   }
