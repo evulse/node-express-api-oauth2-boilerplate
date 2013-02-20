@@ -16,11 +16,10 @@
   },
   "dependencies": {
     "express": "3.1.x",
-    "xml-writer": "1.2.x"
+    "easyxml": "0.0.3"
   },
   "devDependencies": {
-    "vows": "*",
-    "jshint": "*"
+    "vows": "*"
   },
   "license": "Evulse",
   "engines": {
