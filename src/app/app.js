@@ -5,7 +5,6 @@
 
 var
   express = require('express'),
-  negotiate = require('express-negotiate'),
   XMLWriter = require('xml-writer');
 
 var app = express();
