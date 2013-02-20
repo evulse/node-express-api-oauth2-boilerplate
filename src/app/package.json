@@ -15,7 +15,8 @@
     "test": "vows --spec --isolate"
   },
   "dependencies": {
-    "express": "3.0.5"
+    "express": "3.1.x",
+    "xml-writer": "1.2.x"
   },
   "devDependencies": {
     "vows": "*",
