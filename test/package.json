@@ -1,0 +1,26 @@
+{
+  "name": "shippable-api",
+  "version": "0.1.0",
+  "author": "Evulse",
+  "description": "Shippable REST API",
+  "contributors": [
+    {
+      "name": "Muhammad Ghazali",
+      "email": "muhammadghazali2480@gmail.com"
+    }
+  ],
+  "private": true,
+  "dependencies": {},
+  "devDependencies": {
+    "request": "2.11.x",
+    "vows": "0.6.x"
+  },
+  "scripts": {
+    "test": "node_modules/vows/bin/vows --spec --isolate rest-api-end-point-test/*-spec.js"
+  },
+  "license": "Evulse",
+  "engines": {
+    "node": "0.8.x",
+    "npm":  "1.1.x"
+  }
+}
