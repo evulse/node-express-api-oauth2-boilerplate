@@ -3,6 +3,7 @@
  */
 
 var easyxml = require('easyxml');
+var utils = require('./../utils');
 
 exports.name = function (request, response) {
 
@@ -12,12 +13,11 @@ exports.name = function (request, response) {
   if (!name)
     response.json(400, {"message": "Required parameters should not be empty"});
 
-  if (resourceType === 'json' || !resourceType) {
-    response.json(200, {"name": name});
-  } else if (resourceType === 'xml') {
-    response.set('Content-Type', 'application/xml');
-    response.send(200, easyxml.render({"name": name}));
-  } else {
-    response.json(406, {"message": "Unacceptable request"});
-  }
+  utils.generateResource(response, {
+    statusCode: 200,
+    resource: {
+      name: name
+    },
+    type: resourceType
+  });
 };
