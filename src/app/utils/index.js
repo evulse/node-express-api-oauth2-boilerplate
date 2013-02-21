@@ -6,13 +6,12 @@
  * Resource generator
  *
  * @param {Object} response express response object
- * @param {Object} data resource data
+ * @param {Number} statusCode
+ * @param {Object} resource resource in object format
+ * @param {String} type resource content type [ json | xml ]
  */
-exports.generateResource = function (response, data) {
+exports.generateResource = function (response, statusCode, resource, type) {
 
-  var statusCode = data.statusCode;
-  var resource = data.resource;
-  var type = data.type;
   var easyxml = require('easyxml');
 
   switch (type) {
