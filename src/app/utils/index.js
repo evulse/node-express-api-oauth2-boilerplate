@@ -10,7 +10,7 @@
  * @param {Object} resource resource in object format
  * @param {String} type resource content type [ json | xml ]
  */
-exports.generateResource = function (response, statusCode, resource, type) {
+exports.output = function (response, statusCode, resource, type) {
 
   var easyxml = require('easyxml');
 
