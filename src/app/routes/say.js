@@ -11,13 +11,8 @@ exports.name = function (request, response) {
   var name = request.params.name;
 
   if (!name)
-    response.json(400, {"message": "Required parameters should not be empty"});
+    utils.generateResource(response, 400,
+      {"message": "Required parameters should not be empty"}, resourceType);
 
-  utils.generateResource(response, {
-    statusCode: 200,
-    resource: {
-      name: name
-    },
-    type: resourceType
-  });
+  utils.generateResource(response, 200, {name: name}, resourceType);
 };
