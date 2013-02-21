@@ -8,10 +8,13 @@ Welcome to shippable-api's documentation!
 
 Contents:
 
+Contents:
+
 .. toctree::
-   :maxdepth: 2
+    :maxdepth: 4
 
-
+    release-notes
+    rest-api
 
 Indices and tables
 ==================
@@ -19,4 +22,3 @@ Indices and tables
 * :ref:`genindex`
 * :ref:`modindex`
 * :ref:`search`
-
