@@ -1,9 +1,8 @@
 var clients = [
-    { id: '1', name: 'Samplr', clientId: 'abc123', clientSecret: 'ssh-secret' }
+  {id: '1', name: 'Samplr', clientId: 'abc123', clientSecret: 'ssh-secret'}
 ];
 
-
-exports.find = function(id, done) {
+exports.find = function (id, done) {
   for (var i = 0, len = clients.length; i < len; i++) {
     var client = clients[i];
     if (client.id === id) {
@@ -13,7 +12,7 @@ exports.find = function(id, done) {
   return done(null, null);
 };
 
-exports.findByClientId = function(clientId, done) {
+exports.findByClientId = function (clientId, done) {
   for (var i = 0, len = clients.length; i < len; i++) {
     var client = clients[i];
     if (client.clientId === clientId) {

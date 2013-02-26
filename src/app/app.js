@@ -28,7 +28,10 @@ app.configure(function () {
   app.use(express.logger('dev'));
   app.use(express.cookieParser());
   app.use(express.bodyParser());
+  // be sure to use express.session() before passport.session() to ensure that
+  // the login session is restored in the correct order.
   app.use(express.session({ secret: 'keyboard cat' }));
+  // middleware is required to initialize Passport
   app.use(passport.initialize());
   app.use(passport.session());
   app.use(app.router);
