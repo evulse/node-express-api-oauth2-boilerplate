@@ -2,17 +2,19 @@
  * Say route handlers
  */
 
-var easyxml = require('easyxml');
-var utils = require('./../utils');
+var
+  passport = require('passport'),
+  easyxml = require('easyxml'),
+  utils = require('./../utils');
 
-exports.name = function (request, response) {
+exports.name = [
+  passport.authenticate('bearer', {session: false}),
+  function (request, response) {
+    var resourceType = request.params.format;
+    var name = request.params.name;
 
-  var resourceType = request.params.format;
-  var name = request.params.name;
+    if (!name)
+      utils.output(response, 400, {"message": "Required parameters should not be empty"}, resourceType);
 
-  if (!name)
-    utils.output(response, 400,
-      {"message": "Required parameters should not be empty"}, resourceType);
-
-  utils.output(response, 200, {name: name}, resourceType);
-};
+    utils.output(response, 200, {name: name}, resourceType);
+}];

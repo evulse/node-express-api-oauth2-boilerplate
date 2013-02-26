@@ -3,21 +3,37 @@
  * Module dependencies.
  */
 
-var express = require('express');
+var
+  path = require('path'),
+  express = require('express'),
+  passport = require('passport');
 
 /**
  * Internal dependencies
  */
-var sayRoute = require('./routes/say');
+var
+  sayRoute = require('./routes/say'),
+  mainRoute = require('./routes/main'),
+  userRoute = require('./routes/user'),
+  oAuth2Route = require('./routes/oauth2');
 
 var app = express();
 
 app.configure(function () {
   app.set('port', process.env.PORT || 3000);
+  app.set('views', __dirname + '/views');
+  app.set('view engine', 'ejs');
+  app.use(express.static(path.join(__dirname, 'public')));
   app.use(express.favicon());
   app.use(express.logger('dev'));
+  app.use(express.cookieParser());
   app.use(express.bodyParser());
-  app.use(express.methodOverride());
+  // be sure to use express.session() before passport.session() to ensure that
+  // the login session is restored in the correct order.
+  app.use(express.session({ secret: 'keyboard cat' }));
+  // middleware is required to initialize Passport
+  app.use(passport.initialize());
+  app.use(passport.session());
   app.use(app.router);
 });
 
@@ -72,6 +88,10 @@ app.use(function (err, req, res, next) {
   res.render('500', {error: err});
 });
 
+// Passport configuration
+
+require('./auth');
+
 app.get('/', function (request, response) {
   response.send('API BASE PATH');
 });
@@ -79,6 +99,15 @@ app.get('/', function (request, response) {
 // say api end points
 // GET say
 app.get('/say/:name.:format?', sayRoute.name);
+
+app.get('/login', mainRoute.loginForm);
+app.post('/login', mainRoute.login);
+app.get('/logout', mainRoute.logout);
+app.get('/account', mainRoute.account);
+
+app.get('/dialog/authorize', oAuth2Route.authorization);
+app.post('/dialog/authorize/decision', oAuth2Route.decision);
+app.post('/oauth/token', oAuth2Route.token);
 
 var port = process.env.PORT || 5000;
 app.listen(port, function () {

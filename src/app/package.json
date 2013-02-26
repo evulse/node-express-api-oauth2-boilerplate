@@ -1,8 +1,8 @@
 {
-  "name": "shippable-api",
+  "name": "express-api-boilerplate",
   "version": "0.1.0",
   "author": "Evulse",
-  "description": "Shippable REST API",
+  "description": "Express REST API boilerplate.",
   "contributors": [
     {
       "name": "Muhammad Ghazali",
@@ -16,7 +16,14 @@
   },
   "dependencies": {
     "express": "3.1.x",
-    "easyxml": "0.0.3"
+    "easyxml": "0.0.3",
+    "oauth2orize": "0.1.x",
+    "passport": "0.1.X",
+    "passport-local": "0.1.x",
+    "passport-http": "0.2.x",
+    "passport-http-bearer": "0.2.x",
+    "passport-oauth2-client-password": "0.1.x",
+    "connect-ensure-login": "0.1.x"
   },
   "devDependencies": {
     "vows": "*"
