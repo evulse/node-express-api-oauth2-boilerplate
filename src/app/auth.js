@@ -19,6 +19,7 @@ var
  */
 passport.use(new LocalStrategy(
   function (username, password, done) {
+  console.log('LocalStrategy');
     db.users.findByUsername(username, function (err, user) {
       if (err) {
         return done(err);
@@ -58,6 +59,7 @@ passport.deserializeUser(function (id, done) {
  */
 passport.use(new BasicStrategy(
   function (username, password, done) {
+  console.log('BasicStrategy');
     db.clients.findByClientId(username, function (err, client) {
       if (err) {
         return done(err);
@@ -75,6 +77,7 @@ passport.use(new BasicStrategy(
 
 passport.use(new ClientPasswordStrategy(
   function (clientId, clientSecret, done) {
+  console.log('ClientPasswordStrategy');
     db.clients.findByClientId(clientId, function (err, client) {
       if (err) {
         return done(err);
@@ -100,6 +103,7 @@ passport.use(new ClientPasswordStrategy(
  */
 passport.use(new BearerStrategy(
   function (accessToken, done) {
+  console.log('BearerStrategy');
     db.accessTokens.find(accessToken, function (err, token) {
       if (err) {
         return done(err);

@@ -1,8 +1,8 @@
 {
-  "name": "shippable-api",
+  "name": "express-api-boilerplate",
   "version": "0.1.0",
   "author": "Evulse",
-  "description": "Shippable REST API",
+  "description": "Express REST API boilerplate.",
   "contributors": [
     {
       "name": "Muhammad Ghazali",
