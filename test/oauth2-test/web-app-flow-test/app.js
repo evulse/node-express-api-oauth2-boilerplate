@@ -59,7 +59,11 @@ app.configure('development', function () {
 });
 
 app.get('/', function (request, response) {
-  response.send('It works!');
+  response.render('index');
+});
+
+app.get('/home', function (request, response) {
+  response.send('home');
 });
 
 // Redirect the user to the OAuth 2.0 provider for authentication.  When
@@ -71,8 +75,14 @@ app.get('/auth/provider', passport.authenticate('provider', {scope: '*'}));
 // Finish the authentication process by attempting to obtain an access
 // token.  If authorization was granted, the user will be logged in.
 // Otherwise, authentication has failed.
+// http://localhost:5000/dialog/authorize?
+// redirect_uri=http%3A%2F%2Flocalhost%3A3000%2Fauth%2Fprovider%2Fcallback&
+// client_id=abc123&
+// response_type=code&
+// scope=*&
+// type=web_server
 app.get('/auth/provider/callback',
-  passport.authenticate('provider', {successRedirect: '/',
+  passport.authenticate('provider', {successRedirect: '/home',
   failureRedirect: '/login'}));
 
 http.createServer(app).listen(app.get('port'), function () {
