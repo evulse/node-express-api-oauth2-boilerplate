@@ -100,6 +100,9 @@ app.get('/', function (request, response) {
 // GET say
 app.get('/say/:name.:format?', sayRoute.name);
 
+// user api end points
+app.post('/user/create', userRoute.create);
+
 app.get('/login', mainRoute.loginForm);
 app.post('/login', mainRoute.login);
 app.get('/logout', mainRoute.logout);
