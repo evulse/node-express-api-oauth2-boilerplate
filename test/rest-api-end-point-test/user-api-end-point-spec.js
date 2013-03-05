@@ -8,7 +8,7 @@ var
   request = require('request');
 
 /**
- * Scenario: Scenario: Unverified user should receive email verification link
+ * Scenario: Unverified user should receive email verification link
  * Given client POST new user data in JSON
  * And new user data contained 3 required fields (email, password, confirm_password)
  * And new user data accompanied by 3 optional fields (first_name, last_name, name)
