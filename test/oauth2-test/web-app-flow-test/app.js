@@ -15,8 +15,8 @@ var app = express();
 passport.use('provider', new OAuth2Strategy({
   authorizationURL: 'http://localhost:5000/dialog/authorize',
   tokenURL: 'http://localhost:5000/oauth/token',
-  clientID: 'abc123',
-  clientSecret: 'ssh-secret',
+  clientID: '48c907b0-b8ac-4161-84c9-4fbf1030b5da',
+  clientSecret: '48c907b0-dc38-475c-a9c4-4a2e1030b5da',
   callbackURL: 'http://localhost:3000/auth/provider/callback'
 },
 function (accessToken, refreshToken, profile, done) {
