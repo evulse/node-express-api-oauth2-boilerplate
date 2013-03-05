@@ -3,40 +3,59 @@
  */
 
 var
-  Browser = require("zombie"),
+  Browser = require('zombie'),
+  vows = require('vows'),
+  request = require('request'),
   assert = require('assert');
 
-/**
- * Scenario: Authorization request should return authorization code
- *
- * Given the client request authorization from Resource Owner
- * And the client is already registered
- * When the client directs the resource owner to the authorization endpoint
- * And the Resource Owner authorize the client
- * Then authorization server return authorization code
- */
 var constructedURI = 'http://localhost:5000/dialog/authorize?' +
   'response_type=code&' +
   'client_id=48c907b0-b8ac-4161-84c9-4fbf1030b5da&' +
   'scope=*&' +
-  'redirect_uri='+ encodeURIComponent('http://localhost:5000/callback');
+  'redirect_uri=' + encodeURIComponent('http://localhost:5000/test/callback');
 
-// Load the page from localhost
-browser = new Browser();
-browser.visit(constructedURI, {debug: false}, function (e, browser) {
+/**
+ * Scenario: Authorization request should return authorization code
+ *
+ * Given the client request authorization from the resource owner
+ * And the client is already registered
+ * When the resource owner authorize the request
+ * Then the authorization server should return authorization code
+ */
+vows.describe('Scenario: Authorization request should return authorization code')
+  .addBatch({
+  "\nGiven the client request authorization from the resource owner": {
+    "\nAnd the client is already registered": {
+      "\nWhen the resource owner authorize the request": {
+        topic: function () {
+          fillTheLoginForm(constructedURI, this.callback);
+        },
+        'the authorization server should return authorization code':
+          function (err, body) {
+            assert.isNull(err);
+            assert.include(body, 'code');
+          }
+      }
+    }
+  }
+}).export(module);
 
-  // Fill email, password and submit form
-  browser.
-    fill('username', 'joe').
-    fill('password', 'password').
-    pressButton('Submit', function () {
+function fillTheLoginForm (uri, cb) {
 
-    // Form submitted, new page loaded.
-    browser.pressButton('Allow', function () {
-      // GET /callback?code=8vWrf2pKwWJ4TjOC
-      // should return 404
-      console.log('browser.statusCode === 404', (browser.statusCode === 404));
-      browser.close();
+  // Load the page from localhost
+  browser = new Browser();
+  browser.visit(uri, {debug: false}, function (e, browser) {
+
+    // Fill email, password and submit form
+    browser
+      .fill('username', 'joe')
+      .fill('password', 'password')
+      .pressButton('Submit', function () {
+
+      // Form submitted, new page loaded.
+      browser.pressButton('Allow', function () {
+        cb(null, browser.response.body);
+      });
     });
   });
-});
+}
