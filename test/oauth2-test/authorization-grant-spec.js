@@ -19,7 +19,7 @@ var constructedURI = 'http://localhost:5000/dialog/authorize?' +
   'response_type=code&' +
   'client_id=48c907b0-b8ac-4161-84c9-4fbf1030b5da&' +
   'scope=*&' +
-  'redirect_uri=http://localhost:5000/callback';
+  'redirect_uri='+ encodeURIComponent('http://localhost:5000/callback');
 
 // Load the page from localhost
 browser = new Browser();
