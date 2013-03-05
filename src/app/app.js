@@ -112,6 +112,11 @@ app.get('/dialog/authorize', oAuth2Route.authorization);
 app.post('/dialog/authorize/decision', oAuth2Route.decision);
 app.post('/oauth/token', oAuth2Route.token);
 
+// special end points for test purpose only
+app.get('/test/callback', function (req, res) {
+  res.send(req.query);
+});
+
 var port = process.env.PORT || 5000;
 app.listen(port, function () {
   console.log("Listening on " + port);
