@@ -1,8 +1,8 @@
 {
-  "name": "shippable-api",
+  "name": "express-api-boilerplate-test",
   "version": "0.1.0",
   "author": "Evulse",
-  "description": "Shippable REST API",
+  "description": "Express REST API boilerplate.",
   "contributors": [
     {
       "name": "Muhammad Ghazali",
@@ -13,7 +13,8 @@
   "dependencies": {},
   "devDependencies": {
     "request": "2.11.x",
-    "vows": "0.6.x"
+    "vows": "0.6.x",
+    "zombie": "2.0.x"
   },
   "scripts": {
     "test": "node_modules/vows/bin/vows --spec --isolate rest-api-end-point-test/*-spec.js"
