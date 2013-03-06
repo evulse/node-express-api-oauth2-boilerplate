@@ -24,7 +24,8 @@
     "passport-http-bearer": "0.2.x",
     "passport-oauth2-client-password": "0.1.x",
     "connect-ensure-login": "0.1.x",
-    "ejs": "0.8.x"
+    "ejs": "0.8.x",
+    "sendgrid": "0.2.x"
   },
   "devDependencies": {
     "vows": "*"

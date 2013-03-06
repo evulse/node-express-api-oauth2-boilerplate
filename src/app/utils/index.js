@@ -77,8 +77,25 @@ function getRandomInt (min, max) {
  */
 exports.sendEmailVerification = function (email, cb) {
 
-  if (email === '')
-    cb(new Error('Email is required'), null);
-  else if (email) // TODO send the email using Sendgrid
-    cb(null, true);
+  var SendGrid = require('sendgrid').SendGrid;
+  var sd = new SendGrid(process.env.SENDGRID_USERNAME,
+    process.env.SENDGRID_PASSWORD);
+
+  if (email == null && email === '')
+    cb(new Error('We need a valid email address to send email verification link'), null);
+
+  if (email) {
+    // send the email using Sendgrid
+    sd.send({
+      to: 'mike@evulse.com',
+      from: 'boilerplate@evulse.com',
+      subject: 'Hello world!',
+      text: 'Sending email with SendGrid'
+    }, function (success, message) {
+      if (!success)
+        cb(new Error(message), true);
+      else if (success)
+        cb(null, true);
+    });
+  }
 };
