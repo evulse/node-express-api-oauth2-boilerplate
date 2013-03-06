@@ -78,7 +78,7 @@ exports.create = function (req, res) {
           utils.output(res, 500, {"message": err.toString()});
         } else if ((typeof userDoc === 'object') && userDoc) {
           // send email verification link
-          utils.sendEmailVerification(data.email, function (err, isSent) {
+          utils.sendEmailVerification({to: data.email}, function (err, isSent) {
             if (err)
               utils.output(res, 500, {"message": err.toString()});
             else if (err === null && isSent === true)

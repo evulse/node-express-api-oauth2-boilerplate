@@ -3,6 +3,20 @@
  */
 
 /**
+ * Retrun a random int, used by `utils.uid()`
+ *
+ * @param {Number} min
+ * @param {Number} max
+ * @return {Number}
+ * @api private
+ */
+
+function getRandomInt (min, max) {
+
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+/**
  * Resource generator. Will return a JSON resource if the content-type is not
  * specified.
  *
@@ -56,41 +70,39 @@ exports.uid = function (len) {
 };
 
 /**
- * Retrun a random int, used by `utils.uid()`
- *
- * @param {Number} min
- * @param {Number} max
- * @return {Number}
- * @api private
- */
-
-function getRandomInt (min, max) {
-
-  return Math.floor(Math.random() * (max - min + 1)) + min;
-}
-
-/**
  * Send email verification link
  *
- * @param {String} email unverified email address
+ * @param {String}  params email params
+ *                  params.to unverified email address
+ *                  params.from set custom from email address
+ *                  params.subject set custom email subject
+ *                  params.text set custom email content
  * @param {Function} cb callback function
  */
-exports.sendEmailVerification = function (email, cb) {
+exports.sendEmailVerification = function (params, cb) {
 
   var SendGrid = require('sendgrid').SendGrid;
   var sd = new SendGrid(process.env.SENDGRID_USERNAME,
     process.env.SENDGRID_PASSWORD);
 
-  if (email == null && email === '')
-    cb(new Error('We need a valid email address to send email verification link'), null);
+  if (params.to == null && params.to === '')
+    cb(new Error('We need a valid email address to send email verification ' +
+      'link'), null);
 
-  if (email) {
-    // send the email using Sendgrid
+  var to = params.to;
+  var subject = params.subject || 'Please verify the email address for ' +
+    'your Express API Boilerplate Account';
+  var from = params.from || 'boilerplate@evulse.com';
+  // TODO verification link should be generated
+  var verificationLink = 'http://sheltered-reef-5266.herokuapp.com/user/' +
+    'verify/a94a8fe5ccb19ba61c4c08731391e987982fbbd3';
+
+  if (to) {
     sd.send({
-      to: 'mike@evulse.com',
-      from: 'boilerplate@evulse.com',
-      subject: 'Hello world!',
-      text: 'Sending email with SendGrid'
+      to: to,
+      from: from,
+      subject: subject,
+      text: verificationLink
     }, function (success, message) {
       if (!success)
         cb(new Error(message), true);
