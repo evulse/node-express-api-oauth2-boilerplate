@@ -93,9 +93,16 @@ exports.sendEmailVerification = function (params, cb) {
   var subject = params.subject || 'Please verify the email address for ' +
     'your Express API Boilerplate Account';
   var from = params.from || 'boilerplate@evulse.com';
-  // TODO verification link should be generated
+
+  // token is the email + milliseconds
+  var unhashedToken = to + Date.now().toString();
+  var crypto = require('crypto');
+  var token = crypto.createHash('sha1').update(unhashedToken)
+    .digest('hex');
   var verificationLink = 'http://sheltered-reef-5266.herokuapp.com/user/' +
-    'verify/a94a8fe5ccb19ba61c4c08731391e987982fbbd3';
+    'verify/' + token;
+
+  // TODO we should save the verification token in user record
 
   if (to) {
     sd.send({
