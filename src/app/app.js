@@ -30,7 +30,7 @@ app.configure(function () {
   app.use(express.bodyParser());
   // be sure to use express.session() before passport.session() to ensure that
   // the login session is restored in the correct order.
-  app.use(express.session({ secret: 'keyboard cat' }));
+  app.use(express.session({secret: 'keyboard cat'}));
   // middleware is required to initialize Passport
   app.use(passport.initialize());
   app.use(passport.session());
@@ -100,6 +100,9 @@ app.get('/', function (request, response) {
 // GET say
 app.get('/say/:name.:format?', sayRoute.name);
 
+// user api end points
+app.post('/user/create', userRoute.create);
+
 app.get('/login', mainRoute.loginForm);
 app.post('/login', mainRoute.login);
 app.get('/logout', mainRoute.logout);
@@ -108,6 +111,11 @@ app.get('/account', mainRoute.account);
 app.get('/dialog/authorize', oAuth2Route.authorization);
 app.post('/dialog/authorize/decision', oAuth2Route.decision);
 app.post('/oauth/token', oAuth2Route.token);
+
+// special end points for test purpose only
+app.get('/test/callback', function (req, res) {
+  res.send(req.query);
+});
 
 var port = process.env.PORT || 5000;
 app.listen(port, function () {
