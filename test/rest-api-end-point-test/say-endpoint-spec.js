@@ -121,16 +121,16 @@ vows
   "\nGiven the web consumer is not specify the requested content format": {
     "\nWhen the web consumer request resources": {
       topic: function () {
-      request({
-        uri: 'http://localhost:5000/say/ghanoz',
-        method: 'GET'
-      }, this.callback);
-    },
-    "Then the web service should return JSON resource representation":
-      function (error, response, body) {
-        assert.isNull(error);
-        assert.equal(response.statusCode, 200);
-      }
+        request({
+          uri: 'http://localhost:5000/say/ghanoz',
+          method: 'GET'
+        }, this.callback);
+      },
+      "Then the web service should return JSON resource representation":
+        function (error, response, body) {
+          assert.isNull(error);
+          assert.equal(response.statusCode, 200);
+        }
     }
   }
 }).export(module);
