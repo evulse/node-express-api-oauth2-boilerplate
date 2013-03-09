@@ -3,30 +3,45 @@
  */
 
 /**
- * Resource generator
+ * Retrun a random int, used by `utils.uid()`
  *
- * @param {Object} response express response object
- * @param {Number} statusCode
+ * @param {Number} min
+ * @param {Number} max
+ * @return {Number}
+ * @api private
+ */
+
+function getRandomInt (min, max) {
+
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+/**
+ * Resource generator. Will return a JSON resource if the content-type is not
+ * specified.
+ *
+ * @param {Object} res express response object
+ * @param {Number} code http status code
  * @param {Object} resource resource in object format
  * @param {String} type resource content type [ json | xml ]
  */
-exports.output = function (response, statusCode, resource, type) {
+exports.output = function (res, code, resource, type) {
 
   var easyxml = require('easyxml');
 
   switch (type) {
     case 'xml':
-      response.set('Content-Type', 'application/xml');
-      response.send(statusCode, easyxml.render(resource));
+      res.set('Content-Type', 'application/xml');
+      res.send(code, easyxml.render(resource));
       break;
 
     case undefined: // unspecified type will return json
     case 'json':
-      response.json(statusCode, resource);
+      res.json(code, resource);
       break;
 
     default:
-      response.json(406, {"message": "Unacceptable request"});
+      res.json(406, {"message": "Unacceptable request"});
   }
 };
 
@@ -41,6 +56,7 @@ exports.output = function (response, statusCode, resource, type) {
  * @api private
  */
 exports.uid = function (len) {
+
   var
     buf = [],
     chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789',
@@ -54,14 +70,51 @@ exports.uid = function (len) {
 };
 
 /**
- * Retrun a random int, used by `utils.uid()`
+ * Send email verification link
  *
- * @param {Number} min
- * @param {Number} max
- * @return {Number}
- * @api private
+ * @param {String}  params email params
+ *                  params.to unverified email address
+ *                  params.from set custom from email address
+ *                  params.subject set custom email subject
+ *                  params.text set custom email content
+ * @param {Function} cb callback function
  */
+exports.sendEmailVerification = function (params, cb) {
 
-function getRandomInt (min, max) {
-  return Math.floor(Math.random() * (max - min + 1)) + min;
-}
+  var SendGrid = require('sendgrid').SendGrid;
+  var sd = new SendGrid(process.env.SENDGRID_USERNAME,
+    process.env.SENDGRID_PASSWORD);
+
+  if (params.to == null && params.to === '')
+    cb(new Error('We need a valid email address to send email verification ' +
+      'link'), null);
+
+  var to = params.to;
+  var subject = params.subject || 'Please verify the email address for ' +
+    'your Express API Boilerplate Account';
+  var from = params.from || 'boilerplate@evulse.com';
+
+  // token is the email + milliseconds
+  var unhashedToken = to + Date.now().toString();
+  var crypto = require('crypto');
+  var token = crypto.createHash('sha1').update(unhashedToken)
+    .digest('hex');
+  var verificationLink = 'http://sheltered-reef-5266.herokuapp.com/user/' +
+    'verify/' + token;
+
+  // TODO we should save the verification token in user record
+
+  if (to) {
+    sd.send({
+      to: to,
+      from: from,
+      subject: subject,
+      text: verificationLink
+    }, function (success, message) {
+      if (!success)
+        cb(new Error(message), true);
+      else if (success)
+        cb(null, true);
+    });
+  }
+};
