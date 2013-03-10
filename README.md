@@ -11,6 +11,10 @@ server currently is deployed in Heroku http://sheltered-reef-5266.herokuapp.com/
 REST API documentations is located under `doc/rest-api-doc/build/html`.
 Open it with your favorite web browser.
 
+## Continuous Integration
+
+This project is setup through CircleCI. Build Status Images will be added soon.
+
 ## Test
 
 Test is located under `test`. Currently, the test is only covering the REST API
