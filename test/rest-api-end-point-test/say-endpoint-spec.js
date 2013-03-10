@@ -6,7 +6,7 @@ var
   vows = require('vows'),
   assert = require('assert'),
   request = require('request');
-  app = require('../../src/app/app');
+  app = require('./../../src/app/app');
 
 /**
  * Scenario: Retrieve JSON resource
