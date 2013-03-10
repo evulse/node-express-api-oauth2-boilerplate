@@ -6,7 +6,9 @@ var
   vows = require('vows'),
   assert = require('assert'),
   request = require('request');
-  app = require('../../src/app/app');
+  app = require('./../../src/app/app');
+
+  console.log('app', app);
 
 /**
  * Scenario: POST New Record with Bad Data
