@@ -1,0 +1,5 @@
+test:
+  pre:
+    - NODE_ENV=testing
+  override:
+    - cd test/; npm install; npm test
