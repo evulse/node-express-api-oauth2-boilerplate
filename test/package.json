@@ -17,7 +17,7 @@
     "zombie": "2.0.x"
   },
   "scripts": {
-    "test": "node_modules/vows/bin/vows --spec --isolate rest-api-end-point-test/*-spec.js"
+    "test": "node_modules/vows/bin/vows --spec --isolate rest-api-end-point-test/test-endpoint-spec.js"
   },
   "license": "Evulse",
   "engines": {
