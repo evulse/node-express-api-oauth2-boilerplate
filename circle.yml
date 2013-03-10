@@ -1,6 +1,6 @@
 test:
   pre:
-    - NODE_ENV=testing node src/app/app.js
+    - NODE_ENV=testing
     - cd test/
     - npm install
   override:
