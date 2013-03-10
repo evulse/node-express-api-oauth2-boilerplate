@@ -1,0 +1,10 @@
+dependencies:
+  pre:
+    - npm install
+
+test:
+  pre:
+    - NODE_ENV=testing node src/app/app.js
+    - cd test/
+  override:
+    - npm test
