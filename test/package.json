@@ -18,7 +18,7 @@
     "oauth": "0.9.x"
   },
   "scripts": {
-    "test": "node_modules/vows/bin/vows --spec --isolate rest-api-end-point-test/*-spec.js"
+    "test": "node_modules/vows/bin/vows --isolate rest-api-end-point-test/*-spec.js"
   },
   "license": "Evulse",
   "engines": {
