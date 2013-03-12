@@ -20,7 +20,7 @@ function fillTheLoginForm (uri, cb) {
 
   // Load the page from localhost
   browser = new Browser();
-  browser.visit(uri, {debug: true}, function (e, browser) {
+  browser.visit(uri, {debug: true, runScripts: false}, function (e, browser) {
 
     if (e)
       throw new Error(e);
@@ -28,8 +28,10 @@ function fillTheLoginForm (uri, cb) {
     // Fill email, password and submit form
     browser
       .fill('username', 'joe')
-      .fill('password', 'password')
-      .pressButton('Submit', function () {
+      .fill('password', 'password');
+
+    browser.pressButton('Submit', function () {
+      browser.resources.dump();
 
       // Form submitted, new page loaded.
       browser.pressButton('Allow', function () {
