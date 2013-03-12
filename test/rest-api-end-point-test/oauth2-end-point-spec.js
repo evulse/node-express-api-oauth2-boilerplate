@@ -28,8 +28,6 @@ function fillTheLoginForm (uri, cb) {
       .fill('password', 'password');
 
     browser.pressButton('Submit', function () {
-      console.log(result);
-
       // Form submitted, new page loaded.
       browser.pressButton('Allow', function () {
         cb(null, browser.response.body);
