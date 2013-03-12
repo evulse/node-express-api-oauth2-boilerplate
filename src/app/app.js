@@ -117,10 +117,6 @@ app.get('/test/callback', function (req, res) {
   res.send(req.query);
 });
 
-app.get('/test/tokenreceived', function (req, res) {
-  res.send(req.query);
-});
-
 app.get('/test.:format', function (req, res) {
   res.json(200, [
     {
