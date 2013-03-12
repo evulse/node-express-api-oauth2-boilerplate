@@ -7,13 +7,14 @@ var
   OAuth2 = require('oauth').OAuth2,
   vows = require('vows'),
   request = require('request'),
-  assert = require('assert');
+  assert = require('assert'),
+  app = require('./../../src/app/app');
 
-var constructedURI = 'http://sheltered-reef-5266.herokuapp.com/dialog/authorize?' +
+var constructedURI = 'http://localhost:5000/dialog/authorize?' +
   'response_type=code&' +
   'client_id=48c907b0-b8ac-4161-84c9-4fbf1030b5da&' +
   'scope=*&' +
-  'redirect_uri=' + encodeURIComponent('http://sheltered-reef-5266.herokuapp.com/test/callback');
+  'redirect_uri=' + encodeURIComponent('http://localhost:5000/test/callback');
 
 function fillTheLoginForm (uri, cb) {
 
@@ -21,7 +22,8 @@ function fillTheLoginForm (uri, cb) {
   browser = new Browser();
   browser.visit(uri, {debug: false}, function (e, browser) {
 
-    if (e) throw new Error(e);
+    if (e)
+      throw new Error(e);
 
     // Fill email, password and submit form
     browser
@@ -38,18 +40,18 @@ function fillTheLoginForm (uri, cb) {
 }
 
 /**
- * Scenario: Authorization request should return authorization code
+ * Scenario: Able to access protected resource
  *
- * Given the client request authorization from the resource owner
- * And the client is already registered
- * When the resource owner authorize the request
- * Then the authorization server should return authorization code
+ * Given the client request authorization is successful
+ * And the access token request authorization is successful
+ * When the client access protected resource
+ * Then the resource owner should return the actual resource
  */
-vows.describe('Scenario: Authorization request should return authorization code')
+vows.describe('Scenario: Able to access protected resource')
   .addBatch({
-  "\nGiven the client request authorization from the resource owner": {
-    "\nAnd the client is already registered": {
-      "\nWhen the resource owner authorize the request": {
+  "\nGiven the client request authorization is successful": {
+    "\nAnd the access token request authorization is successful": {
+      "\nWhen the client access protected resource": {
         topic: function () {
           fillTheLoginForm(constructedURI, this.callback);
         },
@@ -57,23 +59,25 @@ vows.describe('Scenario: Authorization request should return authorization code'
           topic: function (body) {
             oauth2 = new OAuth2('48c907b0-b8ac-4161-84c9-4fbf1030b5da',
               '48c907b0-dc38-475c-a9c4-4a2e1030b5da', '',
-              'http://sheltered-reef-5266.herokuapp.com/dialog/authorize',
-              'http://sheltered-reef-5266.herokuapp.com/oauth/token');
+              'http://localhost:5000/dialog/authorize',
+              'http://localhost:5000/oauth/token');
 
             oauth2.getOAuthAccessToken(JSON.parse(body).code, {
               grant_type: 'authorization_code',
-              redirect_uri: 'http://sheltered-reef-5266.herokuapp.com/test/callback'
+              redirect_uri: 'http://localhost:5000/test/callback'
             }, this.callback);
           },
-          'the authorization server should return an OAuth token':
-            function (err, accessToken, refreshToken, params) {
-              assert.isNull(err);
-              assert.isNotNull(accessToken);
-              assert.isNotNull(params);
-              assert.include(params, 'access_token');
-              assert.include(params, 'token_type');
-              assert.include(params.token_type, 'bearer');
-            }
+          "after get access token": {
+            topic: function (accessToken, refreshToken, result) {
+              oauth2.get('http://localhost:5000/say/ghanoz.json',
+                accessToken, this.callback);
+            },
+            "the resource owner should return the actual resource":
+              function (err, result, response) {
+                assert.isNull(err);
+                assert.include(result, 'name');
+              }
+          }
         }
       }
     }
