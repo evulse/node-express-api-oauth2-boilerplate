@@ -20,7 +20,7 @@ function fillTheLoginForm (uri, cb) {
 
   // Load the page from localhost
   browser = new Browser();
-  browser.visit(uri, {debug: false}, function (e, browser) {
+  browser.visit(uri, {debug: true}, function (e, browser) {
 
     if (e)
       throw new Error(e);
