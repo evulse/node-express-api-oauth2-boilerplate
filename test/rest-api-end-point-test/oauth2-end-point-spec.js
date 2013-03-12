@@ -9,11 +9,11 @@ var
   request = require('request'),
   assert = require('assert');
 
-var constructedURI = 'http://sheltered-reef-5266.herokuapp.com/dialog/authorize?' +
+var constructedURI = 'http://localhost:5000/dialog/authorize?' +
   'response_type=code&' +
   'client_id=48c907b0-b8ac-4161-84c9-4fbf1030b5da&' +
   'scope=*&' +
-  'redirect_uri=' + encodeURIComponent('http://sheltered-reef-5266.herokuapp.com/test/callback');
+  'redirect_uri=' + encodeURIComponent('http://localhost:5000/test/callback');
 
 function fillTheLoginForm (uri, cb) {
 
@@ -58,17 +58,17 @@ vows.describe('Scenario: Able to access protected resource')
           topic: function (body) {
             oauth2 = new OAuth2('48c907b0-b8ac-4161-84c9-4fbf1030b5da',
               '48c907b0-dc38-475c-a9c4-4a2e1030b5da', '',
-              'http://sheltered-reef-5266.herokuapp.com/dialog/authorize',
-              'http://sheltered-reef-5266.herokuapp.com/oauth/token');
+              'http://localhost:5000/dialog/authorize',
+              'http://localhost:5000/oauth/token');
 
             oauth2.getOAuthAccessToken(JSON.parse(body).code, {
               grant_type: 'authorization_code',
-              redirect_uri: 'http://sheltered-reef-5266.herokuapp.com/test/callback'
+              redirect_uri: 'http://localhost:5000/test/callback'
             }, this.callback);
           },
           "after get access token": {
             topic: function (accessToken, refreshToken, result) {
-              oauth2.get('http://sheltered-reef-5266.herokuapp.com/say/ghanoz.json',
+              oauth2.get('http://localhost:5000/say/ghanoz.json',
                 accessToken, this.callback);
             },
             "the resource owner should return the actual resource":
