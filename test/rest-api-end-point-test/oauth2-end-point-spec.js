@@ -23,6 +23,8 @@ function fillTheLoginForm (uri, cb) {
   browser = new Browser();
   browser.visit(uri, {debug: false}, function (e, browser) {
 
+    if (e) throw new Error(e);
+
     // Fill email, password and submit form
     browser
       .fill('username', 'joe')
