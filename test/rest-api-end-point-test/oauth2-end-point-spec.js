@@ -7,7 +7,8 @@ var
   OAuth2 = require('oauth').OAuth2,
   vows = require('vows'),
   request = require('request'),
-  assert = require('assert');
+  assert = require('assert'),
+  app = require('./../../src/app/app');
 
 var constructedURI = 'http://localhost:5000/dialog/authorize?' +
   'response_type=code&' +

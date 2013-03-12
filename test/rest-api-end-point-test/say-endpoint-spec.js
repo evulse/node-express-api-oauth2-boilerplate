@@ -5,7 +5,7 @@
 var
   vows = require('vows'),
   assert = require('assert'),
-  request = require('request');
+  request = require('request'),
   app = require('./../../src/app/app');
 
 /**
