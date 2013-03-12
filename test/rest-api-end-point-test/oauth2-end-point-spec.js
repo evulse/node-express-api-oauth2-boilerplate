@@ -9,8 +9,6 @@ var
   request = require('request'),
   assert = require('assert');
 
-app = require('./../../src/app/app');
-
 var constructedURI = 'http://sheltered-reef-5266.herokuapp.com/dialog/authorize?' +
   'response_type=code&' +
   'client_id=48c907b0-b8ac-4161-84c9-4fbf1030b5da&' +
