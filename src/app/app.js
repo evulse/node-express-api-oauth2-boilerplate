@@ -112,6 +112,14 @@ app.get('/dialog/authorize', oAuth2Route.authorization);
 app.post('/dialog/authorize/decision', oAuth2Route.decision);
 app.post('/oauth/token', oAuth2Route.token);
 
+// Special end points for test purpose only
+app.get('/test/callback', function (req, res) {
+  res.send(req.query);
+});
+
+app.get('/test/tokenreceived', function (req, res) {
+  res.send(req.query);
+});
 
 app.get('/test.:format', function (req, res) {
   res.json(200, [
@@ -197,11 +205,6 @@ app.post('/test.:format?', function (req, res) {
       }
     });
   }
-});
-
-// special end points for test purpose only
-app.get('/test/callback', function (req, res) {
-  res.send(req.query);
 });
 
 var port = process.env.PORT || 5000;
