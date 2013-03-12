@@ -2,6 +2,4 @@ test:
   pre:
     - NODE_ENV=testing
   override:
-    - cd test/
-    - npm install --dev
-    - npm test
+    - cd test/; npm install --dev; npm test
