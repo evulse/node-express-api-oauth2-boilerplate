@@ -37,7 +37,7 @@ vows.describe('Scenario: Scenario: Unverified user should receive email verifica
           "last_name": "Ghazali",
           "name": "Muhammad Ghazali",
           "password": "5baa61e4c9b93f3f0682250b6cf8331b7ee68fd8",
-          "confirm_password": "5baa61e4c9b93f3f0682250b6cf8331b7ee68fd8",
+          "confirm_password": "5baa61e4c9b93f3f0682250b6cf8331b7ee68fd8"
         },
         strictSSL: true
       }, this.callback);
@@ -94,7 +94,7 @@ vows.describe('Scenario: Unspecified required parameter should response with HTT
     }
   }
 })
-//  .export(module);
+  .export(module);
 
 /**
  * Scenario: Scenario: Duplicate email should response with HTTP 409
@@ -139,7 +139,7 @@ vows.describe('Scenario: Duplicate email should response with HTTP 409')
     }
   }
 })
-//  .export(module);
+  .export(module);
 
 /**
  * Scenario: password and password_confirm do not match response with HTTP 400
@@ -184,4 +184,4 @@ vows.describe('Scenario: password and password_confirm do not match response wit
     }
   }
 })
-//  .export(module);
+  .export(module);
