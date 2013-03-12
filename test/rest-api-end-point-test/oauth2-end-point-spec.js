@@ -11,11 +11,11 @@ var
 
 app = require('./../../src/app/app');
 
-var constructedURI = 'http://localhost:5000/dialog/authorize?' +
+var constructedURI = 'http://sheltered-reef-5266.herokuapp.com/dialog/authorize?' +
   'response_type=code&' +
   'client_id=48c907b0-b8ac-4161-84c9-4fbf1030b5da&' +
   'scope=*&' +
-  'redirect_uri=' + encodeURIComponent('http://localhost:5000/test/callback');
+  'redirect_uri=' + encodeURIComponent('http://sheltered-reef-5266.herokuapp.com/test/callback');
 
 function fillTheLoginForm (uri, cb) {
 
@@ -57,12 +57,12 @@ vows.describe('Scenario: Authorization request should return authorization code'
           topic: function (body) {
             oauth2 = new OAuth2('48c907b0-b8ac-4161-84c9-4fbf1030b5da',
               '48c907b0-dc38-475c-a9c4-4a2e1030b5da', '',
-              'http://localhost:5000/dialog/authorize',
-              'http://localhost:5000/oauth/token');
+              'http://sheltered-reef-5266.herokuapp.com/dialog/authorize',
+              'http://sheltered-reef-5266.herokuapp.com/oauth/token');
 
             oauth2.getOAuthAccessToken(JSON.parse(body).code, {
               grant_type: 'authorization_code',
-              redirect_uri: 'http://localhost:5000/test/callback'
+              redirect_uri: 'http://sheltered-reef-5266.herokuapp.com/test/callback'
             }, this.callback);
           },
           'the authorization server should return an OAuth token':
