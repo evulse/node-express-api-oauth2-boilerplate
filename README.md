@@ -11,6 +11,9 @@ server currently is deployed in Heroku http://sheltered-reef-5266.herokuapp.com/
 REST API documentations is located under `doc/rest-api-doc/build/html`.
 Open it with your favorite web browser.
 
+To build the documentation run `make html` inside the `doc/rest-api-doc`
+directory.
+
 ## Continuous Integration
 
 This project is setup through CircleCI. Build Status Images will be added soon.
@@ -20,6 +23,7 @@ This project is setup through CircleCI. Build Status Images will be added soon.
 Test is located under `test`. Currently, the test is only covering the REST API
 end point test. To run the test follow this steps:
 
-1. Run the REST API server using the testing configuration `NODE_ENV=testing node app.js`
+1. Run the REST API server using the testing configuration `NODE_ENV=testing
+   node app.js`
 
 2. Go to the test directory and run test suite `sudo npm install && npm test`
