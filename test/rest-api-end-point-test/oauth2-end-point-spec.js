@@ -24,12 +24,10 @@ function fillTheLoginForm (uri, cb) {
 
     // Fill email, password and submit form
     browser
-      .fill('username', 'joe')
-      .fill('password', 'password');
+      .fill("username", "joe").fill("password", "password")
+      .pressButton("Submit", function () {
 
-    browser.pressButton('Submit', function () {
-      // Form submitted, new page loaded.
-      browser.pressButton('Allow', function () {
+      browser.pressButton("Allow", function () {
         cb(null, browser.response.body);
       });
     });
