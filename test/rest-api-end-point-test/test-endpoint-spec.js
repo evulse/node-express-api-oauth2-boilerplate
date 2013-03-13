@@ -8,8 +8,6 @@ var
   request = require('request'),
   app = require('./../../src/app/app');
 
-  console.log('app', app);
-
 /**
  * Scenario: POST New Record with Bad Data
  *
