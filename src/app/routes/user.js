@@ -24,29 +24,25 @@ exports.info = [
  */
 function validateNewUserData (data, cb) {
 
-  var isValid = false;
-
   if (data == null)
     cb(new Error('Data is undefined or empty'));
 
-  // check if the required fields exist
-  isValid = (data.hasOwnProperty('email') &&
-    data.hasOwnProperty('password') &&
-    data.hasOwnProperty('confirm_password'));
+  if (data.hasOwnProperty('email') === false)
+    cb(null, 'email_required');
+  else if (data.hasOwnProperty('password') === false)
+    cb(null, 'password_required');
+  else if (data.hasOwnProperty('confirm_password') === false)
+    cb(null, 'confirm_password_required');
+  else if (data.password !== data.confirm_password) {
+    cb(null, 'passwords_not_equal');
+  }
 
-  // check if the optional fields exists
-  isValid = ((data.hasOwnProperty('first_name') ||
-    data.hasOwnProperty('last_name')) ||
-    data.hasOwnProperty('name') || true);
-
-  // check if the passwords equal
-  var isValid = (data.password === data.confirm_password);
 
   // check the email duplication
   UserModel.isAvailable(data.email,
     function (err, result) {
       if (err) {
-        cb(err, null);
+        cb(err);
       } else if (err === null && result === false) {
         isValid = result;
         cb(err, isValid);
@@ -55,6 +51,7 @@ function validateNewUserData (data, cb) {
         cb(err, isValid);
       }
     });
+
 }
 
 /**
@@ -68,24 +65,29 @@ exports.create = function (req, res) {
 
   var data = req.body;
 
-  validateNewUserData(data, function (err, result) {
-    if (err) {
-      utils.output(res, 500, {"message": err.toString()});
-    } else if (result === true) {
-      // save new user data
-      UserModel.save(data, function (err, userDoc) {
-        if (err) {
-          utils.output(res, 500, {"message": err.toString()});
-        } else if ((typeof userDoc === 'object') && userDoc) {
-          // send email verification link
-          utils.sendEmailVerification({to: data.email}, function (err, isSent) {
-            if (err)
-              utils.output(res, 500, {"message": err.toString()});
-            else if (err === null && isSent === true)
-              utils.output(res, 201, userDoc);
-          });
-        }
-      });
-    }
-  });
+  if (data)
+    validateNewUserData(data, function (err, result) {
+      if (err) {
+        utils.output(res, 500, {"message": err.toString()});
+      } else if (result === true) {
+        // save new user data
+        UserModel.save(data, function (err, userDoc) {
+          if (err) {
+            utils.output(res, 500, {"message": err.toString()});
+          } else if ((typeof userDoc === 'object') && userDoc) {
+            // send email verification link
+            utils.sendEmailVerification({to: data.email}, function (err, isSent) {
+              if (err)
+                utils.output(res, 500, {"message": err.toString()});
+              else if (err === null && isSent === true)
+                utils.output(res, 201, userDoc);
+            });
+          }
+        });
+      } else if (typeof result === 'string') {
+        utils.output(res, 400, {"message": "The request cannot be fulfilled due to bad syntax"});
+      } else if (result === false) {
+        utils.output(res, 409, {"message": "User already exists"});
+      }
+    });
 };
