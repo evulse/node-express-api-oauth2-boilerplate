@@ -1,5 +1,5 @@
 /**
- * Module dependencies.
+ * Authentication middlewares
  */
 var
   passport = require('passport'),
