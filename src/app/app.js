@@ -90,7 +90,7 @@ app.use(function (err, req, res, next) {
 
 // Passport configuration
 
-require('./auth');
+require('./utils/authmiddlewares');
 
 app.get('/', function (request, response) {
   response.send('API BASE PATH');
