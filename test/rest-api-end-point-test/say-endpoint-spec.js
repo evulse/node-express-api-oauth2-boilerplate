@@ -8,6 +8,7 @@ var
   assert = require('assert'),
   request = require('request'),
   app = require('./../../src/app/app');
+
 /**
  * Scenario: Retrieve JSON resource
  * Given there is API end point '/say/:name'
