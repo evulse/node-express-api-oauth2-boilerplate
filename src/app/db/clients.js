@@ -1,9 +1,10 @@
 var clients = [
+  // special client credentials for test purpose only
   {
-    id: '1',
-    name: 'Pertamax Client',
-    clientId: '48c907b0-b8ac-4161-84c9-4fbf1030b5da',
-    clientSecret: '48c907b0-dc38-475c-a9c4-4a2e1030b5da'
+    id: '999',
+    name: 'Test',
+    clientId: 'c67f0160-7aad-4aa5-8a88-92bbd6f02a4c',
+    clientSecret: '8638be31-2f91-479d-924a-3742feb17443'
   }
 ];
 
