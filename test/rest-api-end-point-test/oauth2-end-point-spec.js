@@ -16,24 +16,6 @@ var constructedURI = 'http://localhost:5000/dialog/authorize?' +
   'scope=*&' +
   'redirect_uri=' + encodeURIComponent('http://localhost:5000/test/callback');
 
-function fillTheLoginForm (uri, cb) {
-
-  // Load the page from localhost
-  browser = new Browser();
-  browser.visit(uri, function () {
-
-    // Fill email, password and submit form
-    browser
-      .fill('username', 'joe').fill('password', 'password')
-      .pressButton('Submit', function () {
-
-      browser.pressButton('Allow', function () {
-        cb(null, browser.response.body);
-      });
-    });
-  });
-}
-
 /**
  * Scenario: Able to access protected resource
  *
@@ -48,7 +30,10 @@ vows.describe('Scenario: Able to access protected resource')
     "\nAnd the access token request authorization is successful": {
       "\nWhen the client access protected resource": {
         topic: function () {
-          fillTheLoginForm(constructedURI, this.callback);
+          return {
+            // we assume the the client already get the authorization code
+            code: 'sbo2fs3gpHVQWjcE'
+          };
         },
         "after successful authorization request": {
           topic: function (body) {
@@ -57,7 +42,7 @@ vows.describe('Scenario: Able to access protected resource')
               'http://localhost:5000/dialog/authorize',
               'http://localhost:5000/oauth/token');
 
-            oauth2.getOAuthAccessToken(JSON.parse(body).code, {
+            oauth2.getOAuthAccessToken(body.code, {
               grant_type: 'authorization_code',
               redirect_uri: 'http://localhost:5000/test/callback'
             }, this.callback);
