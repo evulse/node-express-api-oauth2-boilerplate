@@ -33,6 +33,14 @@ var users = [
     "password": "5baa61e4c9b93f3f0682250b6cf8331b7ee68fd8",
     "confirm_password": "5baa61e4c9b93f3f0682250b6cf8331b7ee68fd8",
     "verified": false
+  },
+  {
+    "email": "duplicate@test.com",
+    "password": "5baa61e4c9b93f3f0682250b6cf8331b7ee68fd8",
+    "confirm_password": "5baa61e4c9b93f3f0682250b6cf8331b7ee68fd8",
+    "first_name": "Mike",
+    "last_name": "Angell",
+    "name": "Mike Angell"
   }
 ];
 
@@ -49,7 +57,7 @@ var User = function () {
 User.prototype.isAvailable = function (email, cb) {
 
   if (email == null)
-    cb(new Error('Email address is undefined or empty'));
+    cb(null, 'email_required');
 
   for (var i = 0, len = users.length; i < len; i++) {
     var user = users[i];
