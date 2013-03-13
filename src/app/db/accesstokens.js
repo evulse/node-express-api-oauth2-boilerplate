@@ -13,6 +13,5 @@ exports.find = function (key, done) {
 
 exports.save = function (token, userID, clientID, done) {
   tokens[token] = {userID: userID, clientID: clientID};
-  console.log('tokens', tokens);
   return done(null);
 };

@@ -26,16 +26,16 @@ var constructedURI = 'http://localhost:5000/dialog/authorize?' +
  */
 vows.describe('Scenario: Able to access protected resource')
   .addBatch({
-  "\nGiven the client request authorization is successful": {
-    "\nAnd the access token request authorization is successful": {
-      "\nWhen the client access protected resource": {
+  '\nGiven the client request authorization is successful': {
+    '\nAnd the access token request authorization is successful': {
+      '\nWhen the client access protected resource': {
         topic: function () {
           return {
             // we assume the the client already get the authorization code
             code: 'sbo2fs3gpHVQWjcE'
           };
         },
-        "after successful authorization request": {
+        'after successful authorization request': {
           topic: function (body) {
             oauth2 = new OAuth2('c67f0160-7aad-4aa5-8a88-92bbd6f02a4c',
               '8638be31-2f91-479d-924a-3742feb17443', '',
@@ -47,12 +47,12 @@ vows.describe('Scenario: Able to access protected resource')
               redirect_uri: 'http://localhost:5000/test/callback'
             }, this.callback);
           },
-          "after get access token": {
+          'after get access token': {
             topic: function (accessToken, refreshToken, result) {
               oauth2.get('http://localhost:5000/say/ghanoz.json',
                 accessToken, this.callback);
             },
-            "the resource owner should return the actual resource":
+            'the resource owner should return the actual resource':
               function (err, result, response) {
                 assert.isNull(err);
                 assert.include(result, 'name');

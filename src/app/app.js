@@ -153,8 +153,7 @@ app.put('/test.:format', function (req, res) {
 });
 
 app.put('/test/:id.:format?', function (req, res) {
-
-  console.log(req.params);
+  
   res.json(200, {
     "id": 1,
     "name": "Hello",
