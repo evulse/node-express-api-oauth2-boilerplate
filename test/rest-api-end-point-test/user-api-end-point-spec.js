@@ -58,7 +58,8 @@ vows.describe('Scenario: Scenario: Unverified user should receive email verifica
         assert.isFalse(body.verified);
       }
   }
-}).export(module);
+})
+  .export(module);
 
 /**
  * Scenario: Unspecified required parameter should response with HTTP 400
@@ -87,8 +88,8 @@ vows.describe('Scenario: Unspecified required parameter should response with HTT
         }, this.callback);
       },
       "the REST API should response with HTTP 400":
-        function (error, response, body) {
-          assert.isNull(error);
+        function (err, response, body) {
+          assert.isNull(err);
           assert.equal(response.statusCode, 400);
         }
     }
@@ -161,9 +162,9 @@ vows.describe('Scenario: password and password_confirm do not match response wit
             'content-type': 'application/json'
           },
           json: {
-            "email": "duplicate@test.com",
+            "email": "fake@test.com",
             "password": "5baa61e4c9b93f3f0682250b6cf8331b7ee68fd8",
-            "confirm_password": "5baa61e4c9b93f3f0682250b6cf8331b7ee68fe7",
+            "confirm_password": "5bxx61e4c9b93f3f0682250b6cf8331b7ee68fe7",
             "first_name": "Mike",
             "last_name": "Angell",
             "name": "Mike Angell"
