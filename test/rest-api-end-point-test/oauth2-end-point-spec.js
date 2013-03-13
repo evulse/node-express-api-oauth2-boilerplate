@@ -12,7 +12,7 @@ var
 
 var constructedURI = 'http://localhost:5000/dialog/authorize?' +
   'response_type=code&' +
-  'client_id=48c907b0-b8ac-4161-84c9-4fbf1030b5da&' +
+  'client_id=c67f0160-7aad-4aa5-8a88-92bbd6f02a4c&' +
   'scope=*&' +
   'redirect_uri=' + encodeURIComponent('http://localhost:5000/test/callback');
 
@@ -52,8 +52,8 @@ vows.describe('Scenario: Able to access protected resource')
         },
         "after successful authorization request": {
           topic: function (body) {
-            oauth2 = new OAuth2('48c907b0-b8ac-4161-84c9-4fbf1030b5da',
-              '48c907b0-dc38-475c-a9c4-4a2e1030b5da', '',
+            oauth2 = new OAuth2('c67f0160-7aad-4aa5-8a88-92bbd6f02a4c',
+              '8638be31-2f91-479d-924a-3742feb17443', '',
               'http://localhost:5000/dialog/authorize',
               'http://localhost:5000/oauth/token');
 
