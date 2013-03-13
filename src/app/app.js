@@ -88,8 +88,7 @@ app.use(function (err, req, res, next) {
   res.render('500', {error: err});
 });
 
-// Passport configuration
-
+// Load Passport auth middlewares
 require('./utils/authmiddlewares');
 
 app.get('/', function (request, response) {
