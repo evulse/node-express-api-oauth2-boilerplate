@@ -1,17 +1,39 @@
-var codes = {
-  // special authorization code for test purpose only
-  sbo2fs3gpHVQWjcE: {
-    clientID: '999',
-    redirectURI: 'http://localhost:5000/test/callback',
-    userID: '2'
-  }
-};
+var mysql = require('mysql');
+var connection = mysql.createConnection({
+  host: 'localhost',
+  user: '',
+  password: '',
+  database: 'express-api-boilerplate'
+});
+
+connection.connect();
+
 exports.find = function (key, cb) {
   var code = codes[key];
   return cb(null, code);
 };
 
-exports.save = function (code, clientID, redirectURI, userID, cb) {
-  codes[code] = {clientID: clientID, redirectURI: redirectURI, userID: userID};
-  return cb(null);
+/**
+ * @param {String} authCode authorization code
+ * @param {Number} clientID client identifier
+ * @param {String} redirectURI redirect URI
+ * @param {Number} userID user identifier
+ * @param {Function} cb callback function
+ */
+exports.save = function (authCode, clientID, redirectURI, userID, cb) {
+
+  var authCode = {
+    auth_code: authCode,
+    client_id: clientID,
+    redirect_uri: redirectURI,
+    user_id: userID
+  };
+
+  var query = connection.query('INSERT INTO authorization_codes SET ?',
+    authCode, function (err, result) {
+    if (err)
+      cb(err);
+    else if (result.affectedRows && result.affectedRows == 1)
+      cb(null, result);
+  });
 };
