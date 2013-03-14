@@ -22,15 +22,15 @@ exports.find = function (key, cb) {
  */
 exports.save = function (authCode, clientID, redirectURI, userID, cb) {
 
-  var authCode = {
+  var newAuthCode = {
     auth_code: authCode,
     client_id: clientID,
     redirect_uri: redirectURI,
     user_id: userID
   };
 
-  var query = connection.query('INSERT INTO authorization_codes SET ?',
-    authCode, function (err, result) {
+  connection.query('INSERT INTO authorization_codes SET ?',
+    newAuthCode, function (err, result) {
     if (err)
       cb(err);
     else if (result.affectedRows && result.affectedRows == 1)
