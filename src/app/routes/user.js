@@ -45,10 +45,10 @@ function validateNewUserData (data, cb) {
         cb(err);
       } else if (err === null && result === false) {
         isValid = result;
-        cb(err, isValid);
+        cb(null, isValid);
       } else if (err === null && result === true) {
         isValid = result;
-        cb(err, isValid);
+        cb(null, isValid);
       }
     });
 
