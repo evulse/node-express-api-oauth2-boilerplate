@@ -6,12 +6,12 @@ var tokens = {
   }
 };
 
-exports.find = function (key, done) {
+exports.find = function (key, cb) {
   var token = tokens[key];
-  return done(null, token);
+  return cb(null, token);
 };
 
-exports.save = function (token, userID, clientID, done) {
+exports.save = function (token, userID, clientID, cb) {
   tokens[token] = {userID: userID, clientID: clientID};
-  return done(null);
+  return cb(null);
 };

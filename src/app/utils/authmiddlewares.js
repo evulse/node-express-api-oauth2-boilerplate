@@ -18,29 +18,29 @@ var
  * a user is logged in before asking them to approve the request.
  */
 passport.use(new LocalStrategy(
-  function (username, password, done) {
+  function (username, password, cb) {
     db.users.findByUsername(username, function (err, user) {
       if (err) {
-        return done(err);
+        return cb(err);
       }
       if (!user) {
-        return done(null, false);
+        return cb(null, false);
       }
       if (user.password != password) {
-        return done(null, false);
+        return cb(null, false);
       }
-      return done(null, user);
+      return cb(null, user);
     });
   }
 ));
 
-passport.serializeUser(function (user, done) {
-  done(null, user.id);
+passport.serializeUser(function (user, cb) {
+  cb(null, user.id);
 });
 
-passport.deserializeUser(function (id, done) {
+passport.deserializeUser(function (id, cb) {
   db.users.find(id, function (err, user) {
-    done(err, user);
+    cb(err, user);
   });
 });
 
@@ -57,35 +57,35 @@ passport.deserializeUser(function (id, done) {
  * the specification, in practice it is quite common.
  */
 passport.use(new BasicStrategy(
-  function (username, password, done) {
+  function (username, password, cb) {
     db.clients.findByClientId(username, function (err, client) {
       if (err) {
-        return done(err);
+        return cb(err);
       }
       if (!client) {
-        return done(null, false);
+        return cb(null, false);
       }
       if (client.clientSecret != password) {
-        return done(null, false);
+        return cb(null, false);
       }
-      return done(null, client);
+      return cb(null, client);
     });
   }
 ));
 
 passport.use(new ClientPasswordStrategy(
-  function (clientId, clientSecret, done) {
+  function (clientId, clientSecret, cb) {
     db.clients.findByClientId(clientId, function (err, client) {
       if (err) {
-        return done(err);
+        return cb(err);
       }
       if (!client) {
-        return done(null, false);
+        return cb(null, false);
       }
       if (client.clientSecret != clientSecret) {
-        return done(null, false);
+        return cb(null, false);
       }
-      return done(null, client);
+      return cb(null, client);
     });
   }
 ));
@@ -99,26 +99,26 @@ passport.use(new ClientPasswordStrategy(
  * the authorizing user.
  */
 passport.use(new BearerStrategy(
-  function (accessToken, done) {
+  function (accessToken, cb) {
     db.accessTokens.find(accessToken, function (err, token) {
       if (err) {
-        return done(err);
+        return cb(err);
       }
       if (!token) {
-        return done(null, false);
+        return cb(null, false);
       }
 
       db.users.find(token.userID, function (err, user) {
         if (err) {
-          return done(err);
+          return cb(err);
         }
         if (!user) {
-          return done(null, false);
+          return cb(null, false);
         }
         // to keep this example simple, restricted scopes are not implemented,
         // and this is just for illustrative purposes
         var info = {scope: '*'};
-        done(null, user, info);
+        cb(null, user, info);
       });
     });
   }
