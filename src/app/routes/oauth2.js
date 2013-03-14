@@ -23,16 +23,16 @@ var server = oauth2orize.createServer();
 // simple matter of serializing the client's ID, and deserializing by finding
 // the client by ID from the database.
 
-server.serializeClient(function (client, done) {
-  return done(null, client.id);
+server.serializeClient(function (client, cb) {
+  return cb(null, client.id);
 });
 
-server.deserializeClient(function (id, done) {
+server.deserializeClient(function (id, cb) {
   db.clients.find(id, function (err, client) {
     if (err) {
-      return done(err);
+      return cb(err);
     }
-    return done(null, client);
+    return cb(null, client);
   });
 });
 
@@ -50,14 +50,14 @@ server.deserializeClient(function (id, done) {
 // the application.  The application issues a code, which is bound to these
 // values, and will be exchanged for an access token.
 
-server.grant(oauth2orize.grant.code(function (client, redirectURI, user, ares, done) {
+server.grant(oauth2orize.grant.code(function (client, redirectURI, user, ares, cb) {
   var code = utils.uid(16);
 
   db.authorizationCodes.save(code, client.id, redirectURI, user.id, function (err) {
     if (err) {
-      return done(err);
+      return cb(err);
     }
-    done(null, code);
+    cb(null, code);
   });
 }));
 
@@ -67,24 +67,24 @@ server.grant(oauth2orize.grant.code(function (client, redirectURI, user, ares, d
 // application issues an access token on behalf of the user who authorized the
 // code.
 
-server.exchange(oauth2orize.exchange.code(function (client, code, redirectURI, done) {
+server.exchange(oauth2orize.exchange.code(function (client, code, redirectURI, cb) {
   db.authorizationCodes.find(code, function (err, authCode) {
     if (err) {
-      return done(err);
+      return cb(err);
     }
     if (client.id !== authCode.clientID) {
-      return done(null, false);
+      return cb(null, false);
     }
     if (redirectURI !== authCode.redirectURI) {
-      return done(null, false);
+      return cb(null, false);
     }
 
     var token = utils.uid(256);
     db.accessTokens.save(token, authCode.userID, authCode.clientID, function (err) {
       if (err) {
-        return done(err);
+        return cb(err);
       }
-      done(null, token);
+      cb(null, token);
     });
   });
 }));
@@ -109,16 +109,16 @@ server.exchange(oauth2orize.exchange.code(function (client, code, redirectURI, d
 
 exports.authorization = [
   login.ensureLoggedIn(),
-  server.authorization(function (clientID, redirectURI, done) {
+  server.authorization(function (clientID, redirectURI, cb) {
     db.clients.findByClientId(clientID, function (err, client) {
       if (err) {
-        return done(err);
+        return cb(err);
       }
       // WARNING: For security purposes, it is highly advisable to check that
       //          redirectURI provided by the client matches one registered with
       //          the server.  For simplicity, this example does not.  You have
       //          been warned.
-      return done(null, client, redirectURI);
+      return cb(null, client, redirectURI);
     });
   }),
   function (req, res) {
