@@ -12,12 +12,7 @@ var
 /**
  * Internal dependencies
  */
-var
-  mysqlDbConfig = require('./configs/db/mysql');
-  sayRoute = require('./routes/say'),
-  mainRoute = require('./routes/main'),
-  userRoute = require('./routes/user'),
-  oAuth2Route = require('./routes/oauth2');
+var mysqlDbConfig = require('./configs/db/mysql');
 
 var app = express();
 
@@ -110,6 +105,11 @@ app.use(function (err, req, res, next) {
 
 // Load Passport auth middlewares
 require('./utils/authmiddlewares');
+
+sayRoute = require('./routes/say'),
+  mainRoute = require('./routes/main'),
+  userRoute = require('./routes/user'),
+  oAuth2Route = require('./routes/oauth2');
 
 app.get('/', function (request, response) {
   response.send('API BASE PATH');
