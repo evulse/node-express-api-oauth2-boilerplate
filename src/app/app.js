@@ -40,8 +40,6 @@ app.configure('production', function () {
   app.use(express.bodyParser());
   app.use(express.errorHandler());
   app.use(app.router);
-  // assign the db connection to app setting
-  app.set('mysqlDB', mysql.createConnection(mysqlDbConfig.production));
 });
 
 app.configure('development', function () {
@@ -50,8 +48,6 @@ app.configure('development', function () {
   app.use(express.bodyParser());
   app.use(express.errorHandler());
   app.use(app.router);
-  // assign the db connection to app setting
-  app.set('mysqlDB', mysql.createConnection(mysqlDbConfig.development));
 });
 
 app.configure('testing', function () {
@@ -60,11 +56,7 @@ app.configure('testing', function () {
   app.use(express.bodyParser());
   app.use(express.errorHandler());
   app.use(app.router);
-  // assign the db connection to app setting
-  app.set('mysqlDB', mysql.createConnection(mysqlDbConfig.testing));
 });
-
-exports.app = app;
 
 // Since this is the last non-error-handling
 // middleware use()d, we assume 404, as nothing else
@@ -106,7 +98,8 @@ app.use(function (err, req, res, next) {
 // Load Passport auth middlewares
 require('./utils/authmiddlewares');
 
-sayRoute = require('./routes/say'),
+var
+  sayRoute = require('./routes/say'),
   mainRoute = require('./routes/main'),
   userRoute = require('./routes/user'),
   oAuth2Route = require('./routes/oauth2');
@@ -136,14 +129,7 @@ app.get('/test/callback', function (req, res) {
   res.send(req.query);
 });
 
-app.get('mysqlDB').connect(function (err) {
-
-  if (err) {
-    console.log('Connection error', err);
-  } else {
-    var port = process.env.PORT || 5000;
-    app.listen(port, function () {
-      console.log('Listening on ' + port);
-    });
-  }
+var port = process.env.PORT || 5000;
+app.listen(port, function () {
+  console.log('Listening on ' + port);
 });
