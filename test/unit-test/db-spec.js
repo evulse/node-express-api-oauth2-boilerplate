@@ -46,7 +46,6 @@ vows.describe('Scenario: Close connection')
   .addBatch({
   '\nGiven the db connection is active': {
     topic: function () {
-      process.env.NODE_ENV = 'development';
 
       var DB = require('./../../src/app/models/db').DB;
       db = new DB();
