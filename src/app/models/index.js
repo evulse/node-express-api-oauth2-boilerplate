@@ -1,2 +1,5 @@
-UserModel = require('./usermodel.js').UserModel;
-exports.UserModel = new UserModel();
+exports.users = require('./users');
+exports.clients = require('./clients');
+exports.accessTokens = require('./accesstokens');
+exports.authorizationCodes = require('./authorizationcodes');
+exports.UserModel = require('./usermodel.js').UserModel;
