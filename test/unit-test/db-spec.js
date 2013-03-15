@@ -54,10 +54,12 @@ vows.describe('Scenario: Close connection')
     },
     'after the object is instantiated': {
       topic: function (db) {
+        console.log('db', db);
         db.end(this.callback);
       },
       'should end the connection': function (err, result) {
         assert.isNull(err);
+        console.log('result', result);
         assert.isTrue(result);
       }
     }
