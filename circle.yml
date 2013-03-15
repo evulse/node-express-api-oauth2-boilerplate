@@ -1,3 +1,7 @@
+machine:
+  environment:
+    NODE_ENV: 'testing'
+    
 test:
   override:
     - cd test/; npm install --dev; npm test
