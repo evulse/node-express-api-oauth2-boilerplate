@@ -6,12 +6,14 @@
 var
   path = require('path'),
   express = require('express'),
-  passport = require('passport');
+  passport = require('passport'),
+  mysql = require('mysql');
 
 /**
  * Internal dependencies
  */
 var
+  mysqlDbConfig = require('./configs/db/mysql');
   sayRoute = require('./routes/say'),
   mainRoute = require('./routes/main'),
   userRoute = require('./routes/user'),
@@ -37,11 +39,22 @@ app.configure(function () {
   app.use(app.router);
 });
 
+app.configure('production', function () {
+  app.use(express.logger('dev'));
+  app.use(express.bodyParser());
+  app.use(express.errorHandler());
+  app.use(app.router);
+  // assign the db connection to app setting
+  app.set('mysqlDB', mysql.createConnection(mysqlDbConfig.production));
+});
+
 app.configure('development', function () {
   app.use(express.logger('dev'));
   app.use(express.bodyParser());
   app.use(express.errorHandler());
   app.use(app.router);
+  // assign the db connection to app setting
+  app.set('mysqlDB', mysql.createConnection(mysqlDbConfig.development));
 });
 
 app.configure('testing', function () {
@@ -49,15 +62,19 @@ app.configure('testing', function () {
   app.use(express.bodyParser());
   app.use(express.errorHandler());
   app.use(app.router);
+  // assign the db connection to app setting
+  app.set('mysqlDB', mysql.createConnection(mysqlDbConfig.testing));
 });
+
+exports.app = app;
 
 // Since this is the last non-error-handling
 // middleware use()d, we assume 404, as nothing else
 // responded.
 
 // $ curl http://localhost:3000/notfound
-// $ curl http://localhost:3000/notfound -H "Accept: application/json"
-// $ curl http://localhost:3000/notfound -H "Accept: text/plain"
+// $ curl http://localhost:3000/notfound -H 'Accept: application/json'
+// $ curl http://localhost:3000/notfound -H 'Accept: text/plain'
 
 app.use(function (req, res, next) {
   res.status(404);
@@ -116,7 +133,14 @@ app.get('/test/callback', function (req, res) {
   res.send(req.query);
 });
 
-var port = process.env.PORT || 5000;
-app.listen(port, function () {
-  console.log("Listening on " + port);
+app.get('mysqlDB').connect(function (err) {
+
+  if (err) {
+    console.log('Connection error', err);
+  } else {
+    var port = process.env.PORT || 5000;
+    app.listen(port, function () {
+      console.log('Listening on ' + port);
+    });
+  }
 });
