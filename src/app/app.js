@@ -40,6 +40,7 @@ app.configure(function () {
 });
 
 app.configure('production', function () {
+  console.log('Setup production configs');
   app.use(express.logger('dev'));
   app.use(express.bodyParser());
   app.use(express.errorHandler());
@@ -49,6 +50,7 @@ app.configure('production', function () {
 });
 
 app.configure('development', function () {
+  console.log('Setup development configs');
   app.use(express.logger('dev'));
   app.use(express.bodyParser());
   app.use(express.errorHandler());
@@ -58,6 +60,7 @@ app.configure('development', function () {
 });
 
 app.configure('testing', function () {
+  console.log('Setup testing configs');
   app.use(express.logger('dev'));
   app.use(express.bodyParser());
   app.use(express.errorHandler());
