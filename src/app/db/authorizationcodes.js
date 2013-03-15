@@ -1,12 +1,6 @@
-var mysql = require('mysql');
-var connection = mysql.createConnection({
-  host: 'localhost',
-  user: '',
-  password: '',
-  database: 'express-api-boilerplate'
-});
+var app = require('./../app').app;
 
-connection.connect();
+var connection = app.get('mysqlDB');
 
 exports.find = function (key, cb) {
   var code = codes[key];
