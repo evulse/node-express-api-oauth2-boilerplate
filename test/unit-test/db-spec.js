@@ -10,8 +10,6 @@ vows.describe('Scenario: Create object instance')
   .addBatch({
   '\Given the object is instantiate': {
     topic: function () {
-      process.env.NODE_ENV = 'development';
-
       var DB = require('./../../src/app/models/db').DB;
       db = new DB();
       return db;
@@ -27,8 +25,6 @@ vows.describe('Scenario: Connect to database')
   .addBatch({
   '\nGiven the object is instantiate': {
     topic: function () {
-      process.env.NODE_ENV = 'development';
-
       var DB = require('./../../src/app/models/db').DB;
       db = new DB();
       return db;
