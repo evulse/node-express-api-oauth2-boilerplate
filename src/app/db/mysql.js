@@ -50,7 +50,7 @@ function generateConfig () {
 /**
  * @param {Object} options connection options
  */
-var DB = function (options) {
+var MySQL = function (options) {
 
   options = arguments[0] || generateConfig();
   this.connection = mysql.createConnection(options);
@@ -61,7 +61,7 @@ var DB = function (options) {
  * @param {Function} cb callback function, will return the connection if
  *                      connected
  */
-DB.prototype.connect = function (cb) {
+MySQL.prototype.connect = function (cb) {
 
   var self = this;
   self.connection.connect(function (err) {
@@ -79,7 +79,7 @@ DB.prototype.connect = function (cb) {
  *
  * @param {Function} cb callback function, will return true end successfully
  */
-DB.prototype.end = function (cb) {
+MySQL.prototype.end = function (cb) {
 
   var self = this;
 
@@ -96,4 +96,4 @@ DB.prototype.end = function (cb) {
   }
 };
 
-module.exports.DB = DB;
+module.exports.MySQL = MySQL;
