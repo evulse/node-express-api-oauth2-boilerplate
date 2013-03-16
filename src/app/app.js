@@ -12,7 +12,6 @@ var
 /**
  * Internal dependencies
  */
-var mysqlDbConfig = require('./configs/db/mysql');
 
 var app = express();
 
