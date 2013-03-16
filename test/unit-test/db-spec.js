@@ -6,13 +6,13 @@ var
   vows = require('vows'),
   assert = require('assert');
 
+var db = require('./../../src/app/db');
+
 vows.describe('Scenario: Create object instance')
   .addBatch({
   '\Given the object is instantiate': {
     topic: function () {
-      var DB = require('./../../src/app/models/db').DB;
-      db = new DB();
-      return db;
+      return new db.MySQL();
     },
     'the should be instantiated': function (topic) {
       assert.isNotNull(topic);
@@ -25,9 +25,7 @@ vows.describe('Scenario: Connect to database')
   .addBatch({
   '\nGiven the object is instantiate': {
     topic: function () {
-      var DB = require('./../../src/app/models/db').DB;
-      db = new DB();
-      return db;
+      return new db.MySQL();
     },
     'after the object is instantiated': {
       topic: function (db) {
@@ -46,10 +44,7 @@ vows.describe('Scenario: Close connection')
   .addBatch({
   '\nGiven the db connection is active': {
     topic: function () {
-
-      var DB = require('./../../src/app/models/db').DB;
-      db = new DB();
-      return db;
+      return new db.MySQL();
     },
     'after the object is instantiated': {
       topic: function (db) {
