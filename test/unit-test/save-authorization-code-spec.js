@@ -18,7 +18,7 @@ vows.describe('Save authorization code')
     "\nWhen we save the authorization code": {
       topic: function () {
         var authorizationCodesDB =
-          require('./../../src/app/db/authorizationcodes');
+          require('./../../src/app/models/auth/authorizationcodes');
 
         authorizationCodesDB.save('sbo2fs3gpHVQWjcE', 999,
           'http://localhost:5000/test/callback', 2, this.callback);
