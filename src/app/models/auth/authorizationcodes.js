@@ -1,12 +1,5 @@
-var mysql = require('mysql');
-var connection = mysql.createConnection({
-  host: 'localhost',
-  user: '',
-  password: '',
-  database: 'express-api-boilerplate'
-});
-
-connection.connect();
+var MySQL = require('./../../db/index').MySQL;
+var db = new MySQL();
 
 exports.find = function (key, cb) {
   var code = codes[key];
@@ -29,11 +22,13 @@ exports.save = function (authCode, clientID, redirectURI, userID, cb) {
     user_id: userID
   };
 
-  connection.query('INSERT INTO authorization_codes SET ?',
-    newAuthCode, function (err, result) {
-    if (err)
-      cb(err);
-    else if (result.affectedRows && result.affectedRows == 1)
-      cb(null, result);
+  db.connect(function (err, connection) {
+    connection.query('INSERT INTO authorization_codes SET ?',
+      newAuthCode, function (err, result) {
+      if (err)
+        cb(err);
+      else if (result.affectedRows && result.affectedRows == 1)
+        cb(null, result);
+    });
   });
 };

@@ -6,16 +6,12 @@
 var
   path = require('path'),
   express = require('express'),
-  passport = require('passport');
+  passport = require('passport'),
+  mysql = require('mysql');
 
 /**
  * Internal dependencies
  */
-var
-  sayRoute = require('./routes/say'),
-  mainRoute = require('./routes/main'),
-  userRoute = require('./routes/user'),
-  oAuth2Route = require('./routes/oauth2');
 
 var app = express();
 
@@ -37,7 +33,16 @@ app.configure(function () {
   app.use(app.router);
 });
 
+app.configure('production', function () {
+  console.log('Setup production configs');
+  app.use(express.logger('dev'));
+  app.use(express.bodyParser());
+  app.use(express.errorHandler());
+  app.use(app.router);
+});
+
 app.configure('development', function () {
+  console.log('Setup development configs');
   app.use(express.logger('dev'));
   app.use(express.bodyParser());
   app.use(express.errorHandler());
@@ -45,6 +50,7 @@ app.configure('development', function () {
 });
 
 app.configure('testing', function () {
+  console.log('Setup testing configs');
   app.use(express.logger('dev'));
   app.use(express.bodyParser());
   app.use(express.errorHandler());
@@ -56,8 +62,8 @@ app.configure('testing', function () {
 // responded.
 
 // $ curl http://localhost:3000/notfound
-// $ curl http://localhost:3000/notfound -H "Accept: application/json"
-// $ curl http://localhost:3000/notfound -H "Accept: text/plain"
+// $ curl http://localhost:3000/notfound -H 'Accept: application/json'
+// $ curl http://localhost:3000/notfound -H 'Accept: text/plain'
 
 app.use(function (req, res, next) {
   res.status(404);
@@ -91,6 +97,12 @@ app.use(function (err, req, res, next) {
 // Load Passport auth middlewares
 require('./utils/authmiddlewares');
 
+var
+  sayRoute = require('./routes/say'),
+  mainRoute = require('./routes/main'),
+  userRoute = require('./routes/user'),
+  oAuth2Route = require('./routes/oauth2');
+
 app.get('/', function (request, response) {
   response.send('API BASE PATH');
 });
@@ -118,5 +130,5 @@ app.get('/test/callback', function (req, res) {
 
 var port = process.env.PORT || 5000;
 app.listen(port, function () {
-  console.log("Listening on " + port);
+  console.log('Listening on ' + port);
 });

@@ -6,8 +6,7 @@ var
   LocalStrategy = require('passport-local').Strategy,
   BasicStrategy = require('passport-http').BasicStrategy,
   ClientPasswordStrategy = require('passport-oauth2-client-password').Strategy,
-  BearerStrategy = require('passport-http-bearer').Strategy,
-  db = require('./../db');
+  BearerStrategy = require('passport-http-bearer').Strategy;
 
 
 /**
