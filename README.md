@@ -4,15 +4,12 @@ Express REST API Boilerplate
 ## Getting Started
 
 The actual REST API server source code is located under `src/app`. The REST API
-server currently is deployed in Heroku http://sheltered-reef-5266.herokuapp.com/
+server currently is deployed in Heroku http://evulse-express-api.herokuapp.com/
 
 ## Documentations
 
-REST API documentations is located under `doc/rest-api-doc/build/html`.
-Open it with your favorite web browser.
-
-To build the documentation run `make html` inside the `doc/rest-api-doc`
-directory.
+REST API documentations is located on
+https://evulse.atlassian.net/wiki/display/EOAB/REST+API+Documentation
 
 ## Continuous Integration
 
