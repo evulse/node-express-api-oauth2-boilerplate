@@ -53,25 +53,13 @@ function generateConfig () {
 var MySQL = function (options) {
 
   options = arguments[0] || generateConfig();
-  this.connection = mysql.createConnection(options);
-};
-/**
- * Connect to database
- *
- * @param {Function} cb callback function, will return the connection if
- *                      connected
- */
-MySQL.prototype.connect = function (cb) {
-
-  var self = this;
-  self.connection.connect(function (err) {
+  var connection = mysql.createConnection(options);
+  connection.connect(function (err) {
     if (err)
-      cb(err);
-    else if (self.connection)
-      cb(null, self.connection);
-    else if (self.connection == null)
-      cb(null, mysql.createConnection(generateConfig()));
+      console.log('err', err);
   });
+  
+  this.connection = connection;
 };
 
 /**
