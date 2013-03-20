@@ -55,7 +55,7 @@ vows.describe('Scenario: Scenario: Unverified user should receive email verifica
         assert.include(body, 'last_name');
         assert.include(body, 'name');
         assert.include(body, 'verified');
-        assert.isFalse(body.verified);
+        assert.equal(body.verified, 0);
       }
   }
 })
