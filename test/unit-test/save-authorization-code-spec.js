@@ -5,6 +5,9 @@ var
   vows = require('vows'),
   assert = require('assert');
 
+var db = require('./../../src/app/db');
+var connection;
+
 /**
  * Scenario: Save authorization code
  *
@@ -14,8 +17,45 @@ var
  */
 vows.describe('Save authorization code')
   .addBatch({
-  "\nGiven table is empty": {
-    "\nWhen we save the authorization code": {
+  'Set Up': {
+    topic: function () {
+      return new db.MySQL();
+    },
+    'after the object is instantiated': {
+      topic: function (db) {
+        db.connect(this.callback);
+      },
+      'after connected': {
+        topic: function (openedConnection) {
+          connection = openedConnection;
+          var dropTable = 'DROP TABLE IF EXISTS `authorization_codes`;';
+
+          openedConnection.query(dropTable, this.callback);
+        },
+        'after drop table': {
+          topic: function () {
+            var createTableStatement = 'CREATE TABLE `authorization_codes` (' +
+              '`auth_code` varchar(25) NOT NULL,' +
+              '`redirect_uri` varchar(500) NOT NULL,' +
+              '`client_id` int(10) unsigned NOT NULL,' +
+              '`user_id` int(10) unsigned NOT NULL,' +
+              'UNIQUE KEY `auth_code` (`auth_code`)' +
+              ') ENGINE=InnoDB DEFAULT CHARSET=latin1;';
+
+            connection.query(createTableStatement, this.callback);
+          },
+          'should create the table': function (err, result) {
+            assert.isNull(err);
+            assert.isNotNull(result);
+          }
+        }
+      }
+    }
+  }
+})
+  .addBatch({
+  '\nGiven table is empty': {
+    '\nWhen we save the authorization code': {
       topic: function () {
         var authorizationCodesDB =
           require('./../../src/app/models/auth/authorizationcodes');
@@ -23,11 +63,24 @@ vows.describe('Save authorization code')
         authorizationCodesDB.save('sbo2fs3gpHVQWjcE', 999,
           'http://localhost:5000/test/callback', 2, this.callback);
       },
-      "we should have one row": function (err, result) {
+      'we should have one row': function (err, result) {
         assert.isNull(err);
         assert.isNotNull(result);
         assert.strictEqual(result.affectedRows, 1);
       }
+    }
+  }
+})
+  .addBatch({
+  'Tear down': {
+    topic: function () {
+      var dropTable = 'DROP TABLE IF EXISTS `authorization_codes`;';
+
+      connection.query(dropTable, this.callback);
+    },
+    'should drop the table': function (err, result) {
+      assert.isNull(err);
+      assert.isNotNull(result);
     }
   }
 })
