@@ -27,14 +27,9 @@ vows.describe('Scenario: Connect to database')
     topic: function () {
       return new db.MySQL();
     },
-    'after the object is instantiated': {
-      topic: function (db) {
-        db.connect(this.callback);
-      },
-      'should return the connection': function (err, connection) {
-        assert.isNull(err);
-        assert.isTrue(connection._connectCalled);
-      }
+    'should return the connection': function (err, connection) {
+      assert.isNull(err);
+      assert.isTrue(connection.connection._connectCalled);
     }
   }
 })
