@@ -2,50 +2,9 @@
  * User model
  */
 
-// fake user database
-var users = [
-  {
-    "id": 1,
-    "email": "test@test.com",
-    "first_name": "Test first name",
-    "last_name": "Test Last name",
-    "name": "Test full name",
-    "password": "5baa61e4c9b93f3f0682250b6cf8331b7ee68fd8",
-    "confirm_password": "5baa61e4c9b93f3f0682250b6cf8331b7ee68fd8",
-    "verified": false
-  },
-  {
-    "id": 2,
-    "email": "mike@evulse.com",
-    "first_name": "Mike",
-    "last_name": "Angell",
-    "name": "Mike Angell",
-    "password": "5baa61e4c9b93f3f0682250b6cf8331b7ee68fd8",
-    "confirm_password": "5baa61e4c9b93f3f0682250b6cf8331b7ee68fd8",
-    "verified": true
-  },
-  {
-    "id": 3,
-    "email": "muhammadghazali@gmail.com",
-    "first_name": "Muhammad",
-    "last_name": "Ghazali",
-    "name": "Muhammad Ghazali",
-    "password": "5baa61e4c9b93f3f0682250b6cf8331b7ee68fd8",
-    "confirm_password": "5baa61e4c9b93f3f0682250b6cf8331b7ee68fd8",
-    "verified": false
-  },
-  {
-    "email": "duplicate@test.com",
-    "password": "5baa61e4c9b93f3f0682250b6cf8331b7ee68fd8",
-    "confirm_password": "5baa61e4c9b93f3f0682250b6cf8331b7ee68fd8",
-    "first_name": "Mike",
-    "last_name": "Angell",
-    "name": "Mike Angell"
-  }
-];
-
-var User = function () {
-
+var UserModel = function () {
+  var MySQL = require('./../db/index').MySQL;
+  this.db = new MySQL();
 };
 
 /**
@@ -54,38 +13,54 @@ var User = function () {
  * @param {String} email valid email address
  * @param {Function} cb callback function
  */
-User.prototype.isAvailable = function (email, cb) {
+UserModel.prototype.isAvailable = function (email, cb) {
 
   if (email == null)
     cb(null, 'email_required');
 
-  for (var i = 0, len = users.length; i < len; i++) {
-    var user = users[i];
-    if (user.email === email) {
-      cb(null, false);
-    }
-  }
+  var self = this;
 
-  // return true
-  cb(null, true);
+  self.db.connection.query("SELECT * FROM users WHERE email = '" + email + "'",
+    function (err, result) {
+      if (err)
+        cb(err);
+      else if (!result.length)
+        cb(null, true);
+      else if (result.length >= 1 && (result[0].email === email))
+        cb(null, false);
+    });
 };
 
 /**
  * @param {Object} data new user data
  * @param {Function} cb callback function
  */
-User.prototype.save = function (data, cb) {
+UserModel.prototype.save = function (data, cb) {
 
   if (data == null)
     cb(new Error('User is undefined or empty'), null);
 
-  data.id = users.length + 1;
-  data.verified = false;
+  var self = this;
 
-  users.push(data);
+  var newUser = {
+    id: 'a2bf9b0f-198f-4df5-a396-590a007785bd',
+    email: data.email,
+    first_name: data.first_name,
+    last_name: data.last_name,
+    name: data.name,
+    password: data.password,
+    confirm_password: data.confirm_password,
+    verified: 0
+  };
 
-  cb(null, data);
+  self.db.connection.query('INSERT INTO users SET ?', newUser,
+    function (err, result) {
+      if (err)
+        cb(err);
+      else if (result.affectedRows && result.affectedRows == 1)
+        cb(null, newUser);
+    });
 };
 
-exports.UserModel = User;
+exports.UserModel = UserModel;
 

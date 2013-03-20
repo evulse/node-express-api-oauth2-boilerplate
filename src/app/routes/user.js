@@ -3,7 +3,8 @@
  */
 var passport = require('passport');
 
-var UserModel = require('./../models').UserModel;
+var UserModel = require('./../models/index').UserModel;
+var userModel = new UserModel();
 var utils = require('./../utils');
 
 exports.info = [
@@ -37,9 +38,8 @@ function validateNewUserData (data, cb) {
     cb(null, 'passwords_not_equal');
   }
 
-
   // check the email duplication
-  UserModel.isAvailable(data.email,
+  userModel.isAvailable(data.email,
     function (err, result) {
       if (err) {
         cb(err);
@@ -71,7 +71,7 @@ exports.create = function (req, res) {
         utils.output(res, 500, {"message": err.toString()});
       } else if (result === true) {
         // save new user data
-        UserModel.save(data, function (err, userDoc) {
+        userModel.save(data, function (err, userDoc) {
           if (err) {
             utils.output(res, 500, {"message": err.toString()});
           } else if ((typeof userDoc === 'object') && userDoc) {
