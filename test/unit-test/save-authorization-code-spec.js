@@ -6,7 +6,7 @@ var
   assert = require('assert');
 
 var db = require('./../../src/app/db');
-var connection;
+var openedDb = new db.MySQL();
 
 /**
  * Scenario: Save authorization code
@@ -18,37 +18,26 @@ var connection;
 vows.describe('Save authorization code')
   .addBatch({
   'Set Up': {
-    topic: function () {
-      return new db.MySQL();
+    topic: function (db) {
+      var dropTable = 'DROP TABLE IF EXISTS authorization_codes;';
+
+      openedDb.connection.query(dropTable, this.callback);
     },
-    'after the object is instantiated': {
-      topic: function (db) {
-        db.connect(this.callback);
+    'after drop table': {
+      topic: function () {
+        var createTableStatement = 'CREATE TABLE `authorization_codes` (' +
+          '`auth_code` varchar(25) NOT NULL,' +
+          '`redirect_uri` varchar(500) NOT NULL,' +
+          '`client_id` int(10) unsigned NOT NULL,' +
+          '`user_id` int(10) unsigned NOT NULL,' +
+          'UNIQUE KEY `auth_code` (`auth_code`)' +
+          ') ENGINE=InnoDB DEFAULT CHARSET=latin1;';
+
+        openedDb.connection.query(createTableStatement, this.callback);
       },
-      'after connected': {
-        topic: function (openedConnection) {
-          connection = openedConnection;
-          var dropTable = 'DROP TABLE IF EXISTS `authorization_codes`;';
-
-          openedConnection.query(dropTable, this.callback);
-        },
-        'after drop table': {
-          topic: function () {
-            var createTableStatement = 'CREATE TABLE `authorization_codes` (' +
-              '`auth_code` varchar(25) NOT NULL,' +
-              '`redirect_uri` varchar(500) NOT NULL,' +
-              '`client_id` int(10) unsigned NOT NULL,' +
-              '`user_id` int(10) unsigned NOT NULL,' +
-              'UNIQUE KEY `auth_code` (`auth_code`)' +
-              ') ENGINE=InnoDB DEFAULT CHARSET=latin1;';
-
-            connection.query(createTableStatement, this.callback);
-          },
-          'should create the table': function (err, result) {
-            assert.isNull(err);
-            assert.isNotNull(result);
-          }
-        }
+      'should create the table': function (err, result) {
+        assert.isNull(err);
+        assert.isNotNull(result);
       }
     }
   }
@@ -73,14 +62,16 @@ vows.describe('Save authorization code')
 })
   .addBatch({
   'Tear down': {
-    topic: function () {
-      var dropTable = 'DROP TABLE IF EXISTS `authorization_codes`;';
+    'after instantiate the db': {
+      topic: function () {
+        var dropTable = 'DROP TABLE IF EXISTS authorization_codes;';
 
-      connection.query(dropTable, this.callback);
-    },
-    'should drop the table': function (err, result) {
-      assert.isNull(err);
-      assert.isNotNull(result);
+        openedDb.connection.query(dropTable, this.callback);
+      },
+      'should drop the table': function (err, result) {
+        assert.isNull(err);
+        assert.isNotNull(result);
+      }
     }
   }
 })
