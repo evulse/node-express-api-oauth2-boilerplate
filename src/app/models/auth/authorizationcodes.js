@@ -1,9 +1,22 @@
 var MySQL = require('./../../db/index').MySQL;
 var db = new MySQL();
 
+/**
+ * Find the saved Authorization Code
+ *
+ * @param {String} key key string
+ * @param {Function} cb will return the result if the code exists
+ */
 exports.find = function (key, cb) {
-  var code = codes[key];
-  return cb(null, code);
+
+  db.connection.query('SELECT * FROM authorization_codes WHERE auth_code = ' +
+    key, function (err, result) {
+    if (err) {
+      cb(err);
+    } else if (result) {
+      cb(null, result);
+    }
+  });
 };
 
 /**
@@ -22,13 +35,11 @@ exports.save = function (authCode, clientID, redirectURI, userID, cb) {
     user_id: userID
   };
 
-  db.connect(function (err, connection) {
-    connection.query('INSERT INTO authorization_codes SET ?',
-      newAuthCode, function (err, result) {
-      if (err)
-        cb(err);
-      else if (result.affectedRows && result.affectedRows == 1)
-        cb(null, result);
-    });
+  db.connection.query('INSERT INTO authorization_codes SET ?',
+    newAuthCode, function (err, result) {
+    if (err)
+      cb(err);
+    else if (result.affectedRows && result.affectedRows == 1)
+      cb(null, result);
   });
 };
