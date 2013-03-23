@@ -59,6 +59,7 @@ CREATE TABLE IF NOT EXISTS `authorization_request` (
 CREATE TABLE IF NOT EXISTS `clients` (
   `client_id` varchar(36) NOT NULL,
   `client_secret` varchar(36) NOT NULL,
+  `redirect_uri` varchar(250) NOT NULL,
   `user_id` varchar(36) NOT NULL,
   PRIMARY KEY (`client_id`),
   UNIQUE KEY `client_secret` (`client_secret`),
@@ -69,8 +70,8 @@ CREATE TABLE IF NOT EXISTS `clients` (
 -- Dumping data for table `clients`
 --
 
-INSERT INTO `clients` (`client_id`, `client_secret`, `user_id`) VALUES
-('c67f0160-7aad-4aa5-8a88-92bbd6f02a4c', '8638be31-2f91-479d-924a-3742feb17443', '912ac711-8b2e-44c6-a088-cb8cf5ab4916');
+INSERT INTO `clients` (`client_id`, `client_secret`, `redirect_uri`, `user_id`) VALUES
+('c67f0160-7aad-4aa5-8a88-92bbd6f02a4c', '8638be31-2f91-479d-924a-3742feb17443', 'http://example.com/callback', '912ac711-8b2e-44c6-a088-cb8cf5ab4916');
 
 -- --------------------------------------------------------
 
