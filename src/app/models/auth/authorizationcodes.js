@@ -40,6 +40,6 @@ exports.save = function (authCode, clientID, redirectURI, userID, cb) {
     if (err)
       cb(err);
     else if (result.affectedRows && result.affectedRows == 1)
-      cb(null, result);
+      cb(null, true);
   });
 };
