@@ -5,8 +5,8 @@ var
   vows = require('vows'),
   assert = require('assert');
 
-var db = require('./../../src/app/db');
-var openedDb = new db.MySQL();
+var MySQL = require('./../../src/app/db/index').MySQL;
+var db = new MySQL();
 
 /**
  * Scenario: Save authorization code
@@ -15,13 +15,13 @@ var openedDb = new db.MySQL();
  * When we save the authorization code
  * Then we should have one row
  */
-vows.describe('Save authorization code')
+vows.describe('Scenario: Save authorization code')
   .addBatch({
   'Set Up': {
-    topic: function (db) {
+    topic: function () {
       var dropTable = 'DROP TABLE IF EXISTS authorization_codes;';
 
-      openedDb.connection.query(dropTable, this.callback);
+      db.connection.query(dropTable, this.callback);
     },
     'after drop table': {
       topic: function () {
@@ -33,7 +33,7 @@ vows.describe('Save authorization code')
           'UNIQUE KEY `auth_code` (`auth_code`)' +
           ') ENGINE=InnoDB DEFAULT CHARSET=latin1;';
 
-        openedDb.connection.query(createTableStatement, this.callback);
+        db.connection.query(createTableStatement, this.callback);
       },
       'should create the table': function (err, result) {
         assert.isNull(err);
@@ -54,8 +54,7 @@ vows.describe('Save authorization code')
       },
       'we should have one row': function (err, result) {
         assert.isNull(err);
-        assert.isNotNull(result);
-        assert.strictEqual(result.affectedRows, 1);
+        assert.isTrue(result);
       }
     }
   }
@@ -66,7 +65,7 @@ vows.describe('Save authorization code')
       topic: function () {
         var dropTable = 'DROP TABLE IF EXISTS authorization_codes;';
 
-        openedDb.connection.query(dropTable, this.callback);
+        db.connection.query(dropTable, this.callback);
       },
       'should drop the table': function (err, result) {
         assert.isNull(err);
