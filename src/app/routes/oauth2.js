@@ -4,7 +4,8 @@
 var oauth2orize = require('oauth2orize'),
   passport = require('passport'),
   login = require('connect-ensure-login'),
-  utils = require('./../utils');
+  utils = require('./../utils'),
+  db = require('./../models');
 
 // create OAuth 2.0 server
 var server = oauth2orize.createServer();
