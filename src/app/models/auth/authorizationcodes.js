@@ -9,8 +9,8 @@ var db = new MySQL();
  */
 exports.find = function (key, cb) {
 
-  db.connection.query('SELECT * FROM authorization_codes WHERE auth_code = ' +
-    key, function (err, result) {
+  db.connection.query("SELECT * FROM `authorization_request` " +
+    "WHERE auth_code = '" + key + "'", function (err, result) {
     if (err) {
       cb(err);
     } else if (result) {
@@ -35,7 +35,7 @@ exports.save = function (authCode, clientID, redirectURI, userID, cb) {
     user_id: userID
   };
 
-  db.connection.query('INSERT INTO authorization_codes SET ?',
+  db.connection.query('INSERT INTO `authorization_request` SET ?',
     newAuthCode, function (err, result) {
     if (err)
       cb(err);
