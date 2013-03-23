@@ -1,13 +1,3 @@
-var clients = [
-  // special client credentials for test purpose only
-  {
-    id: '999',
-    name: 'Test',
-    clientId: 'c67f0160-7aad-4aa5-8a88-92bbd6f02a4c',
-    clientSecret: '8638be31-2f91-479d-924a-3742feb17443'
-  }
-];
-
 /**
  * Find client by record identifier.
  *
