@@ -9,6 +9,16 @@ var MySQL = require('./../../src/app/db/index').MySQL;
 var db = new MySQL();
 
 /**
+ * Test suite macros
+ * @param {String} name table name
+ */
+function dropTable (name) {
+  var dropTable = 'DROP TABLE IF EXISTS `' + name + '`;';
+
+  db.connection.query(dropTable, this.callback);
+}
+
+/**
  * Scenario: Save authorization code
  *
  * Given table is empty
@@ -18,14 +28,10 @@ var db = new MySQL();
 vows.describe('Scenario: Save authorization code')
   .addBatch({
   'Set Up': {
-    topic: function () {
-      var dropTable = 'DROP TABLE IF EXISTS authorization_codes;';
-
-      db.connection.query(dropTable, this.callback);
-    },
+    topic: dropTable('authorization_request'),
     'after drop table': {
       topic: function () {
-        var createTableStatement = 'CREATE TABLE `authorization_codes` (' +
+        var createTableStatement = 'CREATE TABLE `authorization_request` (' +
           '`auth_code` varchar(25) NOT NULL,' +
           '`redirect_uri` varchar(500) NOT NULL,' +
           '`client_id` int(10) unsigned NOT NULL,' +
@@ -61,16 +67,10 @@ vows.describe('Scenario: Save authorization code')
 })
   .addBatch({
   'Tear down': {
-    'after instantiate the db': {
-      topic: function () {
-        var dropTable = 'DROP TABLE IF EXISTS authorization_codes;';
-
-        db.connection.query(dropTable, this.callback);
-      },
-      'should drop the table': function (err, result) {
-        assert.isNull(err);
-        assert.isNotNull(result);
-      }
+    topic: dropTable('authorization_request'),
+    'should drop the table': function (err, result) {
+      assert.isNull(err);
+      assert.isNotNull(result);
     }
   }
 })
