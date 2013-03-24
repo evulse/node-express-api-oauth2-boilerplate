@@ -2,11 +2,6 @@ machine:
   environment:
     NODE_ENV: testing
 
-database:
-  override:
-    - mysql -u ubuntu circle_test < src/database/express-api-boilerplate-dev.sql
-
 test:
   override:
-    - mysql -u ubuntu circle_test < src/database/express-api-boilerplate-dev.sql
     - cd test/; npm install --dev; npm test
