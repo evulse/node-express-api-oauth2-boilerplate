@@ -29,7 +29,11 @@ function dropTable (name) {
 vows.describe('Scenario: Save authorization code')
   .addBatch({
   'Set Up': {
-    topic: dropTable('authorization_request'),
+    topic: function () {
+      var dropTable = 'DROP TABLE IF EXISTS `authorization_request`;';
+
+      db.connection.query(dropTable, this.callback);
+    },
     'after drop table': {
       topic: function () {
         var createTableStatement = 'CREATE TABLE IF NOT EXISTS ' +
@@ -93,7 +97,11 @@ vows.describe('Scenario: Find authorization code')
 })
   .addBatch({
   'Tear down': {
-    topic: dropTable('authorization_request'),
+    topic: function () {
+      var dropTable = 'DROP TABLE IF EXISTS `authorization_request`;';
+
+      db.connection.query(dropTable, this.callback);
+    },
     'should drop the table': function (err, result) {
       assert.isNull(err);
       assert.isNotNull(result);
