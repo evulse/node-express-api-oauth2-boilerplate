@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Mar 22, 2013 at 10:22 AM
+-- Generation Time: Mar 24, 2013 at 05:47 PM
 -- Server version: 5.5.27
 -- PHP Version: 5.4.7
 
@@ -50,6 +50,13 @@ CREATE TABLE IF NOT EXISTS `authorization_request` (
   KEY `user_id` (`user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+--
+-- Dumping data for table `authorization_request`
+--
+
+INSERT INTO `authorization_request` (`auth_code`, `redirect_uri`, `client_id`, `user_id`) VALUES
+('sbo2fs3gpHVQWjcE', 'http://localhost:5000/test/callback', 'c67f0160-7aad-4aa5-8a88-92bbd6f02a4c', 'a2bf9b0f-198f-4df5-a396-590a007785bd');
+
 -- --------------------------------------------------------
 
 --
@@ -71,7 +78,7 @@ CREATE TABLE IF NOT EXISTS `clients` (
 --
 
 INSERT INTO `clients` (`client_id`, `client_secret`, `redirect_uri`, `user_id`) VALUES
-('c67f0160-7aad-4aa5-8a88-92bbd6f02a4c', '8638be31-2f91-479d-924a-3742feb17443', 'http://example.com/callback', '912ac711-8b2e-44c6-a088-cb8cf5ab4916');
+('c67f0160-7aad-4aa5-8a88-92bbd6f02a4c', '8638be31-2f91-479d-924a-3742feb17443', 'http://localhost:5000/test/callback', '912ac711-8b2e-44c6-a088-cb8cf5ab4916');
 
 -- --------------------------------------------------------
 
@@ -112,13 +119,6 @@ INSERT INTO `users` (`id`, `email`, `password`, `confirm_password`, `first_name`
 ALTER TABLE `access_token`
   ADD CONSTRAINT `access_token_ibfk_1` FOREIGN KEY (`client_id`) REFERENCES `clients` (`client_id`),
   ADD CONSTRAINT `access_token_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`);
-
---
--- Constraints for table `authorization_request`
---
-ALTER TABLE `authorization_request`
-  ADD CONSTRAINT `authorization_request_ibfk_1` FOREIGN KEY (`client_id`) REFERENCES `clients` (`client_id`),
-  ADD CONSTRAINT `authorization_request_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`);
 
 --
 -- Constraints for table `clients`

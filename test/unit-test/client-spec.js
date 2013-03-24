@@ -98,7 +98,7 @@ vows.describe('Scenario: Find the clients')
       'should return the requested clients record': function (err, result) {
         assert.isNull(err);
         assert.isNotNull(result);
-        assert.isArray(result);
+        assert.isObject(result);
       }
     }
   }

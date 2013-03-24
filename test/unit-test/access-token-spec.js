@@ -92,7 +92,6 @@ vows.describe('Scenario: Find the access_token')
       db.connection.query(dropTable, this.callback);
     },
     'should drop the table': function (err, result) {
-      console.log('result', err);
       assert.isNull(err);
       assert.isNotNull(result);
     }
