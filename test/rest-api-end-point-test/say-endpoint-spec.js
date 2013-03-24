@@ -108,7 +108,7 @@ vows
     }
   }
 })
-//  .export(module);
+  .export(module);
 /**
  * Scenario: Not specified the resource format
  *
@@ -158,7 +158,7 @@ vows
     }
   }
 })
-//  .export(module);
+  .export(module);
 /**
  * Scenario: The request content format is not specified
  *
@@ -206,4 +206,4 @@ vows
     }
   }
 })
-//  .export(module);
+  .export(module);
