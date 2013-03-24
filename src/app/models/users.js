@@ -1,6 +1,14 @@
+var uuid = require('node-uuid');
+
 var MySQL = require('./../db/index').MySQL;
 var db = new MySQL();
 
+/**
+ * Find user by user identifier
+ *
+ * @param {String} userID user identifier in UUID format
+ * @param {Function} cb will return the user record if exists
+ */
 exports.find = function (userID, cb) {
 
   db.connection.query("SELECT * FROM `users` " +
@@ -22,6 +30,12 @@ exports.find = function (userID, cb) {
     });
 };
 
+/**
+ * Find user by user email address
+ *
+ * @param {String} userID valid email address
+ * @param {Function} cb will return the user record if exists
+ */
 exports.findByEmail = function (email, cb) {
 
   db.connection.query("SELECT * FROM `users` " +
@@ -42,24 +56,46 @@ exports.findByEmail = function (email, cb) {
     });
 };
 
-exports.save = function (email, password, confirmPassword, firstName, lastName,
-  fullName, verified) {
+/**
+ * Is the account is available for this email address
+ *
+ * @param {String} email valid email address
+ * @param {Function} cb will return true if the account is available
+ */
+exports.isAvailable = function (email, cb) {
 
-  var newUser = {
-    email: email,
-    password: password,
-    confirm_password: confirmPassword,
-    first_name: firstName,
-    last_name: lastName,
-    full_name: fullName,
-    verified: verified
-  };
+  if (email == null)
+    cb(null, 'email_required');
 
-  db.connection.query('INSERT INTO `users` SET ?', newUser,
+  db.connection.query("SELECT * FROM users WHERE email = '" + email + "'",
     function (err, result) {
       if (err)
         cb(err);
-      else
+      else if (!result.length)
         cb(null, true);
+      else if (result.length >= 1 && (result[0].email === email))
+        cb(null, false);
+    });
+};
+
+/**
+ * Save new user
+ *
+ * @param {Object} data new user data
+ * @param {Function} cb will return the new user data if succeed
+ */
+exports.save = function (data, cb) {
+
+  // append the id and verified status
+  data.id = uuid.v4();
+  data.verified = 0;
+
+  db.connection.query('INSERT INTO users SET ?', data,
+    function (err, result) {
+      if (err)
+        cb(err);
+      else if (result.affectedRows && result.affectedRows == 1) {
+        cb(null, data);
+      }
     });
 };

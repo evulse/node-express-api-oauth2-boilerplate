@@ -8,6 +8,9 @@ var
   request = require('request'),
   app = require('./../../src/app/app');
 
+var MySQL = require('./../../src/app/db/index').MySQL;
+var db = new MySQL();
+
 /**
  * Scenario: Unverified user should receive email verification link
  * Given client POST new user data in JSON
@@ -35,7 +38,7 @@ vows.describe('Scenario: Scenario: Unverified user should receive email verifica
           "email": "muhammadghazali2480@gmail.com",
           "first_name": "Muhammad",
           "last_name": "Ghazali",
-          "name": "Muhammad Ghazali",
+          "full_name": "Muhammad Ghazali",
           "password": "5baa61e4c9b93f3f0682250b6cf8331b7ee68fd8",
           "confirm_password": "5baa61e4c9b93f3f0682250b6cf8331b7ee68fd8"
         },
@@ -53,7 +56,7 @@ vows.describe('Scenario: Scenario: Unverified user should receive email verifica
         assert.include(body, 'email');
         assert.include(body, 'first_name');
         assert.include(body, 'last_name');
-        assert.include(body, 'name');
+        assert.include(body, 'full_name');
         assert.include(body, 'verified');
         assert.equal(body.verified, 0);
       }
@@ -82,7 +85,7 @@ vows.describe('Scenario: Unspecified required parameter should response with HTT
           json: {
             "first_name": "Mike",
             "last_name": "Angell",
-            "name": "Mike Angell"
+            "full_name": "Mike Angell"
           },
           strictSSL: true
         }, this.callback);
@@ -122,7 +125,7 @@ vows.describe('Scenario: Duplicate email should response with HTTP 409')
             "confirm_password": "5baa61e4c9b93f3f0682250b6cf8331b7ee68fd8",
             "first_name": "Mike",
             "last_name": "Angell",
-            "name": "Mike Angell"
+            "full_name": "Mike Angell"
           },
           strictSSL: true
         }, this.callback);
@@ -167,7 +170,7 @@ vows.describe('Scenario: password and password_confirm do not match response wit
             "confirm_password": "5bxx61e4c9b93f3f0682250b6cf8331b7ee68fe7",
             "first_name": "Mike",
             "last_name": "Angell",
-            "name": "Mike Angell"
+            "full_name": "Mike Angell"
           },
           strictSSL: true
         }, this.callback);

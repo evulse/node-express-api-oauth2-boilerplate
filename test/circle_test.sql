@@ -111,7 +111,7 @@ INSERT INTO `users` (`id`, `email`, `password`, `confirm_password`, `first_name`
 ('04cbc262-176b-46ea-a91f-09e1793f5d7d', 'duplicate@test.com', '5baa61e4c9b93f3f0682250b6cf8331b7ee68fd8', '5baa61e4c9b93f3f0682250b6cf8331b7ee68fd8', 'Duplicate First Name', 'Duplicate Last Name', 'Duplicate Full Name', 1),
 ('269f1f69-29a9-4894-b33c-2e1753dd3ddd', 'mike@evulse.com', '5baa61e4c9b93f3f0682250b6cf8331b7ee68fd8', '5baa61e4c9b93f3f0682250b6cf8331b7ee68fd8', 'Mike', 'Angell', 'Mike Angell', 1),
 ('912ac711-8b2e-44c6-a088-cb8cf5ab4916', 'test@test.com', '5baa61e4c9b93f3f0682250b6cf8331b7ee68fd8', '5baa61e4c9b93f3f0682250b6cf8331b7ee68fd8', 'Test first name', 'Test Last name', 'Test full name', 0),
-('a2bf9b0f-198f-4df5-a396-590a007785bd', 'muhammadghazali2480@gmail.com', '5baa61e4c9b93f3f0682250b6cf8331b7ee68fd8', '5baa61e4c9b93f3f0682250b6cf8331b7ee68fd8', 'Muhammad', 'Ghazali', 'Muhammad Ghazali', 0);
+('a2bf9b0f-198f-4df5-a396-590a007785bd', 'muhammadghazali@gmail.com', '5baa61e4c9b93f3f0682250b6cf8331b7ee68fd8', '5baa61e4c9b93f3f0682250b6cf8331b7ee68fd8', 'Muhammad', 'Ghazali', 'Muhammad Ghazali', 0);
 
 --
 -- Constraints for dumped tables
