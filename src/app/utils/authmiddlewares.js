@@ -8,6 +8,10 @@ var
   ClientPasswordStrategy = require('passport-oauth2-client-password').Strategy,
   BearerStrategy = require('passport-http-bearer').Strategy;
 
+/**
+ * Internal modules
+ */
+var models = require('./../models/index');
 
 /**
  * LocalStrategy
@@ -17,8 +21,8 @@ var
  * a user is logged in before asking them to approve the request.
  */
 passport.use(new LocalStrategy(
-  function (username, password, cb) {
-    db.users.findByUsername(username, function (err, user) {
+  function (email, password, cb) {
+    models.users.findByEmail(email, function (err, user) {
       if (err) {
         return cb(err);
       }
@@ -38,7 +42,7 @@ passport.serializeUser(function (user, cb) {
 });
 
 passport.deserializeUser(function (id, cb) {
-  db.users.find(id, function (err, user) {
+  models.users.find(id, function (err, user) {
     cb(err, user);
   });
 });
@@ -57,7 +61,7 @@ passport.deserializeUser(function (id, cb) {
  */
 passport.use(new BasicStrategy(
   function (username, password, cb) {
-    db.clients.findByClientId(username, function (err, client) {
+    models.clients.findByClientId(username, function (err, client) {
       if (err) {
         return cb(err);
       }
@@ -74,7 +78,7 @@ passport.use(new BasicStrategy(
 
 passport.use(new ClientPasswordStrategy(
   function (clientId, clientSecret, cb) {
-    db.clients.findByClientId(clientId, function (err, client) {
+    models.clients.findByClientId(clientId, function (err, client) {
       if (err) {
         return cb(err);
       }
@@ -99,7 +103,7 @@ passport.use(new ClientPasswordStrategy(
  */
 passport.use(new BearerStrategy(
   function (accessToken, cb) {
-    db.accessTokens.find(accessToken, function (err, token) {
+    models.accessTokens.find(accessToken, function (err, token) {
       if (err) {
         return cb(err);
       }
@@ -107,7 +111,7 @@ passport.use(new BearerStrategy(
         return cb(null, false);
       }
 
-      db.users.find(token.userID, function (err, user) {
+      models.users.find(token.userID, function (err, user) {
         if (err) {
           return cb(err);
         }

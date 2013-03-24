@@ -60,8 +60,10 @@ vows.describe('Scenario: Save authorization code')
   '\nGiven table is empty': {
     '\nWhen we save the authorization code': {
       topic: function () {
-        authCodeModel.save('sbo2fs3gpHVQWjcE', 999,
-          'http://localhost:5000/test/callback', 2, this.callback);
+        authCodeModel.save('sbo2fs3gpHVQWjcE',
+          'c67f0160-7aad-4aa5-8a88-92bbd6f02a4c',
+          'http://localhost:5000/test/callback',
+          'a2bf9b0f-198f-4df5-a396-590a007785bd', this.callback);
       },
       'we should have one row': function (err, result) {
         assert.isNull(err);
@@ -89,8 +91,7 @@ vows.describe('Scenario: Find authorization code')
       'the authorization code should be saved': function (err, result) {
         assert.isNull(err);
         assert.isNotNull(result);
-        assert.isArray(result);
-        assert.include(result[0], 'auth_code');
+        assert.include(result, 'authCode');
       }
     }
   }

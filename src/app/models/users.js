@@ -1,25 +1,65 @@
-var users = [
-  {id: '1', username: 'bob', password: 'secret', name: 'Bob Smith'},
-  // special resource owner credentials for test purpose only
-  {id: '999', username: 'joe', password: 'password', name: 'Joe Davis'}
-];
+var MySQL = require('./../db/index').MySQL;
+var db = new MySQL();
 
-exports.find = function (id, cb) {
-  for (var i = 0, len = users.length; i < len; i++) {
-    var user = users[i];
-    if (user.id === id) {
-      return cb(null, user);
-    }
-  }
-  return cb(null, null);
+exports.find = function (userID, cb) {
+
+  db.connection.query("SELECT * FROM `users` " +
+    "WHERE id = '" + userID + "'",
+    function (err, result) {
+      if (err) {
+        cb(err);
+      }
+      else if (result) {
+        for (var i = 0, len = result.length; i < len; i++) {
+          var user = result[i];
+          if (user.id === userID) {
+            return cb(null, user);
+          }
+        }
+
+        return cb(null, null);
+      }
+    });
 };
 
-exports.findByUsername = function (username, cb) {
-  for (var i = 0, len = users.length; i < len; i++) {
-    var user = users[i];
-    if (user.username === username) {
-      return cb(null, user);
-    }
-  }
-  return cb(null, null);
+exports.findByEmail = function (email, cb) {
+
+  db.connection.query("SELECT * FROM `users` " +
+    "WHERE id = '" + userID + "'",
+    function (err, result) {
+      if (err) {
+        cb(err);
+      }
+      else if (result) {
+        for (var i = 0, len = result.length; i < len; i++) {
+          var user = result[i];
+          if (user.username === email) {
+            return cb(null, user);
+          }
+        }
+        return cb(null, null);
+      }
+    });
+};
+
+exports.save = function (email, password, confirmPassword, firstName, lastName,
+  fullName, verified) {
+
+  var newUser = {
+    email: email,
+    password: password,
+    confirm_password: confirmPassword,
+    first_name: firstName,
+    last_name: lastName,
+    full_name: fullName,
+    verified: verified
+  };
+
+  db.connection.query('INSERT INTO `users` SET ?', newUser,
+    function (err, result) {
+      if (err)
+        cb(err);
+      else
+        cb(null, true);
+    });
 };

@@ -10,12 +10,18 @@ var db = new MySQL();
 exports.find = function (key, cb) {
 
   db.connection.query("SELECT * FROM `authorization_request` " +
-    "WHERE auth_code = '" + key + "'", function (err, result) {
+    "WHERE auth_code = '" + key + "'", function (err, record) {
     if (err) {
       cb(err);
-    } else if (result) {
-      cb(null, result);
+    } else if (record[0]) {
+      cb(null, {
+        authCode: record[0].auth_code,
+        redirectURI: record[0].redirect_uri,
+        clientID: record[0].client_id,
+        userID: record[0].user_id
+      });
     }
+
   });
 };
 

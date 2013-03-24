@@ -125,6 +125,7 @@ app.post('/oauth/token', oAuth2Route.token);
 
 // Special end points for test purpose only
 app.get('/test/callback', function (req, res) {
+  console.log('req.query', req.query);
   res.send(req.query);
 });
 

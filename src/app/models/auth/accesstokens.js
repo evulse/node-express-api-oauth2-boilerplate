@@ -11,10 +11,16 @@ exports.find = function (key, cb) {
 
   db.connection.query("SELECT * FROM access_token WHERE token = '" + key + "'",
     function (err, result) {
-      if (err)
+      if (err) {
         cb(err);
-      else if (result)
-        cb(null, result);
+      }
+      else if (result[0]) {
+        cb(null, {
+          clientID: result[0].client_id,
+          userID: result[0].user_id,
+          token: result[0].token
+        });
+      }
     });
 };
 
