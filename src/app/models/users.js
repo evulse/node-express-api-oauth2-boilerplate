@@ -11,8 +11,7 @@ var db = new MySQL();
  */
 exports.find = function (userID, cb) {
 
-  db.connection.query("SELECT * FROM `users` " +
-    "WHERE id = '" + userID + "'",
+  db.connection.query("SELECT * FROM `users` WHERE id = '" + userID + "'",
     function (err, result) {
       if (err) {
         cb(err);
@@ -33,13 +32,12 @@ exports.find = function (userID, cb) {
 /**
  * Find user by user email address
  *
- * @param {String} userID valid email address
+ * @param {String} email valid email address
  * @param {Function} cb will return the user record if exists
  */
 exports.findByEmail = function (email, cb) {
 
-  db.connection.query("SELECT * FROM `users` " +
-    "WHERE id = '" + userID + "'",
+  db.connection.query("SELECT * FROM `users` WHERE email = '" + email + "'",
     function (err, result) {
       if (err) {
         cb(err);
@@ -67,7 +65,7 @@ exports.isAvailable = function (email, cb) {
   if (email == null)
     cb(null, 'email_required');
 
-  db.connection.query("SELECT * FROM users WHERE email = '" + email + "'",
+  db.connection.query("SELECT * FROM `users` WHERE email = '" + email + "'",
     function (err, result) {
       if (err)
         cb(err);
@@ -90,12 +88,11 @@ exports.save = function (data, cb) {
   data.id = uuid.v4();
   data.verified = 0;
 
-  db.connection.query('INSERT INTO users SET ?', data,
-    function (err, result) {
-      if (err)
-        cb(err);
-      else if (result.affectedRows && result.affectedRows == 1) {
-        cb(null, data);
-      }
-    });
+  db.connection.query('INSERT INTO `users` SET ?', data, function (err, result) {
+    if (err)
+      cb(err);
+    else if (result.affectedRows && result.affectedRows == 1) {
+      cb(null, data);
+    }
+  });
 };
