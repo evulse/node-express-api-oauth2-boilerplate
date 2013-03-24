@@ -60,7 +60,8 @@ function validateNewUserData (data, cb) {
 exports.create = function (req, res) {
 
   if (!req.is('application/json'))
-    utils.output(res, 415, {"message": "New user data should be in JSON format."});
+    utils.output(res, 415,
+      {"message": "New user data should be in JSON format."});
 
   var data = req.body;
 
@@ -75,7 +76,8 @@ exports.create = function (req, res) {
             utils.output(res, 500, {"message": err.toString()});
           } else if ((typeof userDoc === 'object') && userDoc) {
             // send email verification link
-            utils.sendEmailVerification({to: data.email}, function (err, isSent) {
+            utils.sendEmailVerification({to: data.email},
+            function (err, isSent) {
               if (err)
                 utils.output(res, 500, {"message": err.toString()});
               else if (err === null && isSent === true)
@@ -84,7 +86,8 @@ exports.create = function (req, res) {
           }
         });
       } else if (typeof result === 'string') {
-        utils.output(res, 400, {"message": "The request cannot be fulfilled due to bad syntax"});
+        utils.output(res, 400, {
+          "message": "The request cannot be fulfilled due to bad syntax"});
       } else if (result === false) {
         utils.output(res, 409, {"message": "User already exists"});
       }
