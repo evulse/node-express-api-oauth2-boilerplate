@@ -4,34 +4,37 @@ var db = new MySQL();
 /**
  * Find client by record identifier.
  *
- * @param {String} id record identifier
- * @param {Function} cb callback function
- *
+ * @param {String} clientID client identifier in UUID format
+ * @param {Function} cb will return the result if the client exists
  */
-exports.find = function (id, cb) {
-  for (var i = 0, len = clients.length; i < len; i++) {
-    var client = clients[i];
-    if (client.id === id) {
-      return cb(null, client);
-    }
-  }
-  return cb(null, null);
+exports.find = function (clientID, cb) {
+
+  db.connection.query("SELECT * FROM `clients` " +
+    "WHERE client_id = '" + clientID + "'",
+    function (err, result) {
+      if (err)
+        cb(err);
+      else if (result)
+        cb(null, result);
+    });
 };
 
 /**
  * Find client by client identifier
  *
- * @param {String} clientId client identifier in UUID format
+ * @param {String} clientID client identifier in UUID format
  * @param {Function} cb callback function
  */
-exports.findByClientId = function (clientId, cb) {
-  for (var i = 0, len = clients.length; i < len; i++) {
-    var client = clients[i];
-    if (client.clientId === clientId) {
-      return cb(null, client);
-    }
-  }
-  return cb(null, null);
+exports.findByClientId = function (clientID, cb) {
+
+  db.connection.query("SELECT * FROM `clients` " +
+    "WHERE client_id = '" + clientID + "'",
+    function (err, result) {
+      if (err)
+        cb(err);
+      else if (result)
+        cb(null, result);
+    });
 };
 
 exports.save = function (clientID, clientSecret, redirectURI, userID, cb) {

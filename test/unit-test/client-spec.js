@@ -64,3 +64,56 @@ vows.describe('Scenario: Saving client credentials')
   }
 })
   .export(module);
+
+/**
+ * Scenario: Find the clients
+ *
+ * Given clients is saved
+ * When find the clients
+ * Then should return the requested clients record
+ */
+vows.describe('Scenario: Find the clients')
+  .addBatch({
+  'Given acess_token is saved': {
+    'When find the clients': {
+      topic: function () {
+        clientsModel.find('c67f0160-7aad-4aa5-8a88-92bbd6f02a4c',
+          this.callback);
+      },
+      'should return the requested clients record': function (err, result) {
+        assert.isNull(err);
+        assert.isNotNull(result);
+        assert.isArray(result);
+      }
+    }
+  }
+})
+  .addBatch({
+  'Given acess_token is saved': {
+    'When find the clients': {
+      topic: function () {
+        clientsModel.findByClientId('c67f0160-7aad-4aa5-8a88-92bbd6f02a4c',
+          this.callback);
+      },
+      'should return the requested clients record': function (err, result) {
+        assert.isNull(err);
+        assert.isNotNull(result);
+        assert.isArray(result);
+      }
+    }
+  }
+})
+  .addBatch({
+  'Tear down': {
+    topic: function () {
+      var dropTable = 'DROP TABLE IF EXISTS `clients`;';
+
+      db.connection.query(dropTable, this.callback);
+    },
+    'should drop the table': function (err, result) {
+      assert.isNull(err);
+      assert.isNotNull(result);
+    }
+  }
+})
+  .export(module);
