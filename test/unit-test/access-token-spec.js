@@ -79,7 +79,7 @@ vows.describe('Scenario: Find the access_token')
       'should return the requested access_token record': function (err, result) {
         assert.isNull(err);
         assert.isNotNull(result);
-        assert.isArray(result);
+        assert.isObject(result);
       }
     }
   }
