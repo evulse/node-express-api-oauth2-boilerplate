@@ -1,5 +1,5 @@
 /*
- * Save the authorization code unit test suite.
+ * Authorization code unit test suite.
  */
 var
   vows = require('vows'),
@@ -7,6 +7,7 @@ var
 
 var MySQL = require('./../../src/app/db/index').MySQL;
 var db = new MySQL();
+var authCodeModel = require('./../../src/app/models/auth/authorizationcodes');
 
 /**
  * Test suite macros
@@ -31,13 +32,16 @@ vows.describe('Scenario: Save authorization code')
     topic: dropTable('authorization_request'),
     'after drop table': {
       topic: function () {
-        var createTableStatement = 'CREATE TABLE `authorization_request` (' +
+        var createTableStatement = 'CREATE TABLE IF NOT EXISTS ' +
+          '`authorization_request` (' +
           '`auth_code` varchar(25) NOT NULL,' +
-          '`redirect_uri` varchar(500) NOT NULL,' +
-          '`client_id` int(10) unsigned NOT NULL,' +
-          '`user_id` int(10) unsigned NOT NULL,' +
-          'UNIQUE KEY `auth_code` (`auth_code`)' +
-          ') ENGINE=InnoDB DEFAULT CHARSET=latin1;';
+          '`redirect_uri` varchar(250) NOT NULL,' +
+          '`client_id` varchar(36) NOT NULL,' +
+          '`user_id` varchar(36) NOT NULL,' +
+          'PRIMARY KEY (`auth_code`),' +
+          'KEY `client_id` (`client_id`),' +
+          'KEY `user_id` (`user_id`)' +
+          ') ENGINE=InnoDB DEFAULT CHARSET=utf8;';
 
         db.connection.query(createTableStatement, this.callback);
       },
@@ -52,15 +56,37 @@ vows.describe('Scenario: Save authorization code')
   '\nGiven table is empty': {
     '\nWhen we save the authorization code': {
       topic: function () {
-        var authorizationCodesDB =
-          require('./../../src/app/models/auth/authorizationcodes');
-
-        authorizationCodesDB.save('sbo2fs3gpHVQWjcE', 999,
+        authCodeModel.save('sbo2fs3gpHVQWjcE', 999,
           'http://localhost:5000/test/callback', 2, this.callback);
       },
       'we should have one row': function (err, result) {
         assert.isNull(err);
         assert.isTrue(result);
+      }
+    }
+  }
+})
+  .export(module);
+
+/**
+ * Scenario: Find authorization code
+ *
+ * Given authorization code is saved
+ * When we find the authorization code
+ * Then the authorization code should be saved
+ */
+vows.describe('Scenario: Find authorization code')
+  .addBatch({
+  '\nGiven authorization code is saved': {
+    '\nWhen we find the authorization code': {
+      topic: function () {
+        authCodeModel.find('sbo2fs3gpHVQWjcE', this.callback);
+      },
+      'the authorization code should be saved': function (err, result) {
+        assert.isNull(err);
+        assert.isNotNull(result);
+        assert.isArray(result);
+        assert.include(result[0], 'auth_code');
       }
     }
   }
