@@ -51,14 +51,16 @@ server.deserializeClient(function (id, cb) {
 // values, and will be exchanged for an access token.
 
 server.grant(oauth2orize.grant.code(function (client, redirectURI, user, ares, cb) {
+
   var code = utils.uid(16);
 
-  models.authorizationCodes.save(code, client.id, redirectURI, user.id, function (err) {
-    if (err) {
-      return cb(err);
-    }
-    cb(null, code);
-  });
+  models.authorizationCodes.save(code, client.id, redirectURI, user.id,
+    function (err) {
+      if (err) {
+        return cb(err);
+      }
+      cb(null, code);
+    });
 }));
 
 // Exchange authorization codes for access tokens.  The callback accepts the
@@ -68,19 +70,19 @@ server.grant(oauth2orize.grant.code(function (client, redirectURI, user, ares, c
 // code.
 
 server.exchange(oauth2orize.exchange.code(function (client, code, redirectURI, cb) {
-  models.authorizationCodes.find(code, function (err, authCode) {
+  models.authorizationCodes.find(code, function (err, record) {
     if (err) {
       return cb(err);
     }
-    if (client.id !== authCode.clientID) {
+    if (client.clientID !== record.clientID) {
       return cb(null, false);
     }
-    if (redirectURI !== authCode.redirectURI) {
+    if (redirectURI !== record.redirectURI) {
       return cb(null, false);
     }
 
     var token = utils.uid(256);
-    models.accessTokens.save(token, authCode.userID, authCode.clientID, function (err) {
+    models.accessTokens.save(token, record.userID, record.clientID, function (err) {
       if (err) {
         return cb(err);
       }
