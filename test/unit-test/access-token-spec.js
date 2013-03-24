@@ -11,16 +11,6 @@ var db = new MySQL();
 var accessTokenModel = require('./../../src/app/models/auth/accesstokens');
 
 /**
- * Test suite macros
- * @param {String} name table name
- */
-function dropTable (name) {
-  var dropTable = 'DROP TABLE IF EXISTS `' + name + '`;';
-
-  db.connection.query(dropTable, this.callback);
-}
-
-/**
  * Scenario: Save access token
  *
  * Given access_token table is empty
@@ -30,7 +20,11 @@ function dropTable (name) {
 vows.describe('Scenario: Save access token')
   .addBatch({
   'Set Up': {
-    topic: dropTable('access_token'),
+    topic: function () {
+      var dropTable = 'DROP TABLE IF EXISTS `access_token`;';
+
+      db.connection.query(dropTable, this.callback);
+    },
     'after drop table': {
       topic: function () {
         var createTableStatement = 'CREATE TABLE IF NOT EXISTS `access_token` (' +
@@ -92,8 +86,13 @@ vows.describe('Scenario: Find the access_token')
 })
   .addBatch({
   'Tear down': {
-    topic: dropTable('access_token'),
+    topic: function () {
+      var dropTable = 'DROP TABLE IF EXISTS `access_token`;';
+
+      db.connection.query(dropTable, this.callback);
+    },
     'should drop the table': function (err, result) {
+      console.log('result', err);
       assert.isNull(err);
       assert.isNotNull(result);
     }
