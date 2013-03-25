@@ -13,7 +13,11 @@ exports.info = [
     // `BearerStrategy`.  It is typically used to indicate scope of the token,
     // and used in access control checks.  For illustrative purposes, this
     // example simply returns the scope in the response.
-    res.json({user_id: req.user.id, name: req.user.name, scope: req.authInfo.scope});
+    res.json({
+      user_id: req.user.id,
+      name: req.user.name,
+      scope: req.authInfo.scope
+    });
   }
 ];
 
@@ -39,18 +43,17 @@ function validateNewUserData (data, cb) {
 
   // check the email duplication
   usersModel.isAvailable(data.email,
-    function (err, result) {
+    function (err, available) {
       if (err) {
         cb(err);
-      } else if (err === null && result === false) {
-        isValid = result;
+      } else if (err === null && available === false) {
+        isValid = available;
         cb(null, isValid);
-      } else if (err === null && result === true) {
-        isValid = result;
+      } else if (err === null && available === true) {
+        isValid = available;
         cb(null, isValid);
       }
     });
-
 }
 
 /**
@@ -66,10 +69,10 @@ exports.create = function (req, res) {
   var data = req.body;
 
   if (data)
-    validateNewUserData(data, function (err, result) {
+    validateNewUserData(data, function (err, valid) {
       if (err) {
         utils.output(res, 500, {"message": err.toString()});
-      } else if (result === true) {
+      } else if (valid === true) {
         // save new user data
         usersModel.save(data, function (err, userDoc) {
           if (err) {
@@ -85,10 +88,10 @@ exports.create = function (req, res) {
             });
           }
         });
-      } else if (typeof result === 'string') {
+      } else if (typeof valid === 'string') {
         utils.output(res, 400, {
           "message": "The request cannot be fulfilled due to bad syntax"});
-      } else if (result === false) {
+      } else if (valid === false) {
         utils.output(res, 409, {"message": "User already exists"});
       }
     });
