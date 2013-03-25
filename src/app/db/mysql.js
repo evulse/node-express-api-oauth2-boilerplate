@@ -21,12 +21,7 @@ function generateConfig () {
 
     case 'development':
       if (process.env.CLEARDB_DATABASE_URL) {
-        return {
-          host: 'us-cdbr-east-03.cleardb.com',
-          user: 'b9243bb6197285',
-          password: '1272e486',
-          database: 'heroku_a631bf5313a65cb'
-        };
+        return process.env.CLEARDB_DATABASE_URL;
       } else {
         return {
           host: 'localhost',
