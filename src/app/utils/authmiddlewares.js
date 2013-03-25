@@ -2,6 +2,7 @@
  * Authentication middlewares
  */
 var
+  crypto = require('crypto'),
   passport = require('passport'),
   LocalStrategy = require('passport-local').Strategy,
   BasicStrategy = require('passport-http').BasicStrategy,
@@ -22,6 +23,8 @@ var models = require('./../models/index');
  */
 passport.use(new LocalStrategy(
   function (email, password, cb) {
+    password = crypto.createHash('sha1').update(password).digest('hex');
+
     models.users.findByEmail(email, function (err, user) {
       if (err) {
         return cb(err);

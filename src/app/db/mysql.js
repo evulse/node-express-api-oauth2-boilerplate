@@ -20,6 +20,7 @@ function generateConfig () {
       break;
 
     case 'development':
+      console.log('process.env.CLEARDB_DATABASE_URL', process.env.CLEARDB_DATABASE_URL);
       if (process.env.CLEARDB_DATABASE_URL) {
         return 'mysql://b9243bb6197285:1272e486@us-cdbr-east-03.cleardb.com/' +
           'heroku_a631bf5313a65cb?reconnect=true';
