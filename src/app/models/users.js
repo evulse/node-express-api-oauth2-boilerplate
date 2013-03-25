@@ -15,8 +15,7 @@ exports.find = function (userID, cb) {
     function (err, result) {
       if (err) {
         cb(err);
-      }
-      else if (result) {
+      } else if (result) {
         for (var i = 0, len = result.length; i < len; i++) {
           var user = result[i];
           if (user.id === userID) {
@@ -41,14 +40,14 @@ exports.findByEmail = function (email, cb) {
     function (err, result) {
       if (err) {
         cb(err);
-      }
-      else if (result) {
+      } else if (result) {
         for (var i = 0, len = result.length; i < len; i++) {
           var user = result[i];
-          if (user.username === email) {
+          if (user.email === email) {
             return cb(null, user);
           }
         }
+
         return cb(null, null);
       }
     });
