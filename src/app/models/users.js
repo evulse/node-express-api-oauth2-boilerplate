@@ -87,11 +87,12 @@ exports.save = function (data, cb) {
   data.id = uuid.v4();
   data.verified = 0;
 
-  db.connection.query('INSERT INTO `users` SET ?', data, function (err, result) {
-    if (err)
-      cb(err);
-    else if (result.affectedRows && result.affectedRows == 1) {
-      cb(null, data);
-    }
-  });
+  db.connection.query('INSERT INTO `users` SET ?', data,
+    function (err, result) {
+      if (err)
+        cb(err);
+      else if (result.affectedRows && result.affectedRows == 1) {
+        cb(null, data);
+      }
+    });
 };
