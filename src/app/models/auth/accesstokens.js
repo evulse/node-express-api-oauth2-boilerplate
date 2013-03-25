@@ -1,17 +1,50 @@
-var tokens = {
-  // special access tokens for test purpose only
-  '0fpDaM01fd6LXl1uXiLHZYIpC3BLNJe9PoVadrB2Pt5HX8LHJUKSPGA1iE0zEcWR6r8Xs3wsSIn5U9wD8DIrZ2iqUYVzyyyg5OvO5B6oFDMJfIUCM2E0H2n4E5sC207ytKzYZ8yElVWNas5boNtu02hSL3kqDeoFDGWzZSUSmMfYlXa29uFeUyAtUY0aDHWgAMIWSnW10X7hxHlFYup9GhjTgAT8iRwXU8EaHYFqGtMG05Zu21OfEKRyF1X3zpw1': {
-    userID: '2',
-    clientID: '999'
-  }
-};
+var MySQL = require('./../../db/index').MySQL;
+var db = new MySQL();
 
+/**
+ * Find the saved Access Token
+ *
+ * @param {String} token the token string
+ * @param {Function} cb will return the token records in Array format if found
+ */
 exports.find = function (key, cb) {
-  var token = tokens[key];
-  return cb(null, token);
+
+  db.connection.query("SELECT * FROM access_token WHERE token = '" + key + "'",
+    function (err, result) {
+      if (err) {
+        cb(err);
+      }
+      else if (result[0]) {
+        cb(null, {
+          clientID: result[0].client_id,
+          userID: result[0].user_id,
+          token: result[0].token
+        });
+      }
+    });
 };
 
+/**
+ * Save the access token
+ *
+ * @param {String} token the token string
+ * @param {String} userID user identifier in UUID
+ * @param {String} clientID client identifier in UUID
+ * @param {Function} cb will return true if saved
+ */
 exports.save = function (token, userID, clientID, cb) {
-  tokens[token] = {userID: userID, clientID: clientID};
-  return cb(null);
+
+  var newAccessToken = {
+    client_id: clientID,
+    user_id: userID,
+    token: token
+  };
+
+  db.connection.query('INSERT INTO access_token SET ?', newAccessToken,
+    function (err, result) {
+      if (err)
+        cb(err);
+      else if (result.affectedRows && result.affectedRows == 1)
+        cb(null, true);
+    });
 };
