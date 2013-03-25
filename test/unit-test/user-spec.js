@@ -103,8 +103,6 @@ vows.describe('Scenario: Find the users')
           this.callback);
       },
       'should return the requested users record': function (err, result) {
-        console.log('err', err);
-        console.log('result', result);
         assert.isNull(err);
         assert.isNotNull(result);
         assert.isObject(result);
