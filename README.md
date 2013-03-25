@@ -20,7 +20,10 @@ This project is setup through CircleCI. Build Status Images will be added soon.
 Test is located under `test`. Currently, the test is only covering the REST API
 end point test. To run the test follow this steps:
 
-1. Run the REST API server using the testing configuration `NODE_ENV=testing
-   node app.js`
+1. Setup the environment by run this command `export NODE_ENV=testing`.
+Currently, the test runner is only run best in Ubuntu 12.10.
 
-2. Go to the test directory and run test suite `sudo npm install && npm test`
+2. Start the MySQL database with database name `circle_test`, username `ubuntu`
+and leave the password empty.
+
+3. Run `npm test`
