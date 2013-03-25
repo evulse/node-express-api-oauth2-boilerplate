@@ -20,12 +20,17 @@ function generateConfig () {
       break;
 
     case 'development':
-      return {
-        host: 'localhost',
-        user: 'root',
-        password: 'pazzword',
-        database: 'express-api-boilerplate-dev'
-      };
+      if (process.env.CLEARDB_DATABASE_URL) {
+        return 'mysql://b9243bb6197285:1272e486@us-cdbr-east-03.cleardb.com/' +
+          'heroku_a631bf5313a65cb?reconnect=true';
+      } else {
+        return {
+          host: 'localhost',
+          user: 'root',
+          password: 'pazzword',
+          database: 'express-api-boilerplate-dev'
+        };
+      }
       break;
 
     case 'testing':
@@ -58,7 +63,7 @@ var MySQL = function (options) {
     if (err)
       console.log('err', err);
   });
-  
+
   this.connection = connection;
 };
 
