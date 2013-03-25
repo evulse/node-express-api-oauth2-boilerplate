@@ -26,7 +26,8 @@
     "connect-ensure-login": "0.1.x",
     "ejs": "0.8.x",
     "sendgrid": "0.2.x",
-    "mysql": "2.0.x"
+    "mysql": "2.0.x",
+    "node-uuid": "1.4.x"
   },
   "devDependencies": {
     "vows": "*"

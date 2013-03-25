@@ -4,7 +4,8 @@
 var oauth2orize = require('oauth2orize'),
   passport = require('passport'),
   login = require('connect-ensure-login'),
-  utils = require('./../utils');
+  utils = require('./../utils'),
+  models = require('./../models');
 
 // create OAuth 2.0 server
 var server = oauth2orize.createServer();
@@ -27,7 +28,7 @@ server.serializeClient(function (client, cb) {
 });
 
 server.deserializeClient(function (id, cb) {
-  db.clients.find(id, function (err, client) {
+  models.clients.find(id, function (err, client) {
     if (err) {
       return cb(err);
     }
@@ -50,14 +51,16 @@ server.deserializeClient(function (id, cb) {
 // values, and will be exchanged for an access token.
 
 server.grant(oauth2orize.grant.code(function (client, redirectURI, user, ares, cb) {
+
   var code = utils.uid(16);
 
-  db.authorizationCodes.save(code, client.id, redirectURI, user.id, function (err) {
-    if (err) {
-      return cb(err);
-    }
-    cb(null, code);
-  });
+  models.authorizationCodes.save(code, client.id, redirectURI, user.id,
+    function (err) {
+      if (err) {
+        return cb(err);
+      }
+      cb(null, code);
+    });
 }));
 
 // Exchange authorization codes for access tokens.  The callback accepts the
@@ -67,19 +70,19 @@ server.grant(oauth2orize.grant.code(function (client, redirectURI, user, ares, c
 // code.
 
 server.exchange(oauth2orize.exchange.code(function (client, code, redirectURI, cb) {
-  db.authorizationCodes.find(code, function (err, authCode) {
+  models.authorizationCodes.find(code, function (err, record) {
     if (err) {
       return cb(err);
     }
-    if (client.id !== authCode.clientID) {
+    if (client.clientID !== record.clientID) {
       return cb(null, false);
     }
-    if (redirectURI !== authCode.redirectURI) {
+    if (redirectURI !== record.redirectURI) {
       return cb(null, false);
     }
 
     var token = utils.uid(256);
-    db.accessTokens.save(token, authCode.userID, authCode.clientID, function (err) {
+    models.accessTokens.save(token, record.userID, record.clientID, function (err) {
       if (err) {
         return cb(err);
       }
@@ -109,7 +112,7 @@ server.exchange(oauth2orize.exchange.code(function (client, code, redirectURI, c
 exports.authorization = [
   login.ensureLoggedIn(),
   server.authorization(function (clientID, redirectURI, cb) {
-    db.clients.findByClientId(clientID, function (err, client) {
+    models.clients.findByClientId(clientID, function (err, client) {
       if (err) {
         return cb(err);
       }

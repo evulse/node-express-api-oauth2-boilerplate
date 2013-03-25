@@ -9,13 +9,19 @@ var db = new MySQL();
  */
 exports.find = function (key, cb) {
 
-  db.connection.query('SELECT * FROM authorization_codes WHERE auth_code = ' +
-    key, function (err, result) {
+  db.connection.query("SELECT * FROM `authorization_request` " +
+    "WHERE auth_code = '" + key + "'", function (err, record) {
     if (err) {
       cb(err);
-    } else if (result) {
-      cb(null, result);
+    } else if (record[0]) {
+      cb(null, {
+        authCode: record[0].auth_code,
+        redirectURI: record[0].redirect_uri,
+        clientID: record[0].client_id,
+        userID: record[0].user_id
+      });
     }
+
   });
 };
 
@@ -35,11 +41,11 @@ exports.save = function (authCode, clientID, redirectURI, userID, cb) {
     user_id: userID
   };
 
-  db.connection.query('INSERT INTO authorization_codes SET ?',
+  db.connection.query('INSERT INTO `authorization_request` SET ?',
     newAuthCode, function (err, result) {
     if (err)
       cb(err);
     else if (result.affectedRows && result.affectedRows == 1)
-      cb(null, result);
+      cb(null, true);
   });
 };
