@@ -6,44 +6,28 @@ var
   vows = require('vows'),
   assert = require('assert');
 
-var MySQL = require('./../../src/app/db/index').MySQL;
-var db = new MySQL();
+var db = require('./../../src/app/db/index').MySQL;
 
-vows.describe('Scenario: Create object instance')
+vows.describe('Scenario: Require the module')
   .addBatch({
-  '\Given the object is instantiate': {
+  '\nGiven module loaded': {
     topic: db,
-    'the should be instantiated': function (topic) {
-      assert.isNotNull(topic);
+    'should contained a pool': function (topic) {
+      assert.include(topic, 'pool');
     }
   }
-})
-  .export(module);
+});
 
-vows.describe('Scenario: Connect to database')
+vows.describe('Scenario: Get database connection')
   .addBatch({
   '\nGiven the object is instantiate': {
-    topic: db,
+    topic: function () {
+      db.pool.getConnection(this.callback);
+    },
     'should return the connection': function (err, connection) {
       assert.isNull(err);
-      assert.isTrue(connection.connection._connectCalled);
-    }
-  }
-})
-  .export(module);
-
-vows.describe('Scenario: Close connection')
-  .addBatch({
-  '\nGiven the db connection is active': {
-    topic: db,
-    'after the object is instantiated': {
-      topic: function (db) {
-        db.end(this.callback);
-      },
-      'should end the connection': function (err, result) {
-        assert.isNull(err);
-        assert.isTrue(result);
-      }
+      assert.isNotNull(connection)
+      assert.isTrue(connection._connectCalled);
     }
   }
 })

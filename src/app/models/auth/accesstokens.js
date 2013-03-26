@@ -1,5 +1,4 @@
-var MySQL = require('./../../db/index').MySQL;
-var db = new MySQL();
+var db = require('./../../db/index').MySQL;
 
 /**
  * Find the saved Access Token
@@ -9,19 +8,21 @@ var db = new MySQL();
  */
 exports.find = function (key, cb) {
 
-  db.connection.query("SELECT * FROM access_token WHERE token = '" + key + "'",
-    function (err, result) {
-      if (err) {
-        cb(err);
-      }
-      else if (result[0]) {
-        cb(null, {
-          clientID: result[0].client_id,
-          userID: result[0].user_id,
-          token: result[0].token
-        });
-      }
-    });
+  db.pool.getConnection(function (err, connection) {
+    connection.query("SELECT * FROM access_token WHERE token = '" + key + "'",
+      function (err, result) {
+        if (err) {
+          cb(err);
+        } else if (result[0]) {
+          connection.end();
+          cb(null, {
+            clientID: result[0].client_id,
+            userID: result[0].user_id,
+            token: result[0].token
+          });
+        }
+      });
+  });
 };
 
 /**
@@ -40,11 +41,15 @@ exports.save = function (token, userID, clientID, cb) {
     token: token
   };
 
-  db.connection.query('INSERT INTO access_token SET ?', newAccessToken,
-    function (err, result) {
-      if (err)
-        cb(err);
-      else if (result.affectedRows && result.affectedRows == 1)
-        cb(null, true);
-    });
+  db.pool.getConnection(function (err, connection) {
+    connection.query('INSERT INTO access_token SET ?', newAccessToken,
+      function (err, result) {
+        if (err) {
+          cb(err);
+        } else if (result.affectedRows && result.affectedRows == 1) {
+          connection.end();
+          cb(null, true);
+        }
+      });
+  });
 };

@@ -1,5 +1,4 @@
-var MySQL = require('./../../db/index').MySQL;
-var db = new MySQL();
+var db = require('./../../db/index').MySQL;
 
 /**
  * Find the saved Authorization Code
@@ -9,19 +8,23 @@ var db = new MySQL();
  */
 exports.find = function (key, cb) {
 
-  db.connection.query("SELECT * FROM `authorization_request` " +
-    "WHERE auth_code = '" + key + "'", function (err, record) {
-    if (err) {
-      cb(err);
-    } else if (record[0]) {
-      cb(null, {
-        authCode: record[0].auth_code,
-        redirectURI: record[0].redirect_uri,
-        clientID: record[0].client_id,
-        userID: record[0].user_id
-      });
-    }
+  db.pool.getConnection(function (err, connection) {
+    connection.query("SELECT * FROM `authorization_request` " +
+      "WHERE auth_code = '" + key + "'", function (err, record) {
 
+      connection.end();
+
+      if (err) {
+        cb(err);
+      } else if (record[0]) {
+        cb(null, {
+          authCode: record[0].auth_code,
+          redirectURI: record[0].redirect_uri,
+          clientID: record[0].client_id,
+          userID: record[0].user_id
+        });
+      }
+    });
   });
 };
 
@@ -41,11 +44,15 @@ exports.save = function (authCode, clientID, redirectURI, userID, cb) {
     user_id: userID
   };
 
-  db.connection.query('INSERT INTO `authorization_request` SET ?',
-    newAuthCode, function (err, result) {
-    if (err)
-      cb(err);
-    else if (result.affectedRows && result.affectedRows == 1)
-      cb(null, true);
+  db.pool.getConnection(function (err, connection) {
+    connection.query('INSERT INTO `authorization_request` SET ?',
+      newAuthCode, function (err, result) {
+      connection.end();
+      
+      if (err)
+        cb(err);
+      else if (result.affectedRows && result.affectedRows == 1)
+        cb(null, true);
+    });
   });
 };
