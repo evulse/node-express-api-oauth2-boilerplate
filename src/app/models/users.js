@@ -11,21 +11,23 @@ var db = new MySQL();
  */
 exports.find = function (userID, cb) {
 
-  db.connection.query("SELECT * FROM `users` WHERE id = '" + userID + "'",
-    function (err, result) {
-      if (err) {
-        cb(err);
-      } else if (result) {
-        for (var i = 0, len = result.length; i < len; i++) {
-          var user = result[i];
-          if (user.id === userID) {
-            return cb(null, user);
+  db.pool.getConnection(function (err, connection) {
+    connection.query("SELECT * FROM `users` WHERE id = '" + userID + "'",
+      function (err, result) {
+        if (err) {
+          cb(err);
+        } else if (result) {
+          for (var i = 0, len = result.length; i < len; i++) {
+            var user = result[i];
+            if (user.id === userID) {
+              return cb(null, user);
+            }
           }
-        }
 
-        return cb(null, null);
-      }
-    });
+          return cb(null, null);
+        }
+      });
+  });
 };
 
 /**
@@ -36,21 +38,23 @@ exports.find = function (userID, cb) {
  */
 exports.findByEmail = function (email, cb) {
 
-  db.connection.query("SELECT * FROM `users` WHERE email = '" + email + "'",
-    function (err, result) {
-      if (err) {
-        cb(err);
-      } else if (result) {
-        for (var i = 0, len = result.length; i < len; i++) {
-          var user = result[i];
-          if (user.email === email) {
-            return cb(null, user);
+  db.pool.getConnection(function (err, connection) {
+    connection.query("SELECT * FROM `users` WHERE email = '" + email + "'",
+      function (err, result) {
+        if (err) {
+          cb(err);
+        } else if (result) {
+          for (var i = 0, len = result.length; i < len; i++) {
+            var user = result[i];
+            if (user.email === email) {
+              return cb(null, user);
+            }
           }
-        }
 
-        return cb(null, null);
-      }
-    });
+          return cb(null, null);
+        }
+      });
+  });
 };
 
 /**
@@ -64,15 +68,17 @@ exports.isAvailable = function (email, cb) {
   if (email == null)
     cb(null, 'email_required');
 
-  db.connection.query("SELECT * FROM `users` WHERE email = '" + email + "'",
-    function (err, result) {
-      if (err)
-        cb(err);
-      else if (!result.length)
-        cb(null, true);
-      else if (result.length >= 1 && (result[0].email === email))
-        cb(null, false);
-    });
+  db.pool.getConnection(function (err, connection) {
+    connection.query("SELECT * FROM `users` WHERE email = '" + email + "'",
+      function (err, result) {
+        if (err)
+          cb(err);
+        else if (!result.length)
+          cb(null, true);
+        else if (result.length >= 1 && (result[0].email === email))
+          cb(null, false);
+      });
+  });
 };
 
 /**
@@ -87,12 +93,14 @@ exports.save = function (data, cb) {
   data.id = uuid.v4();
   data.verified = 0;
 
-  db.connection.query('INSERT INTO `users` SET ?', data,
-    function (err, result) {
-      if (err)
-        cb(err);
-      else if (result.affectedRows && result.affectedRows == 1) {
-        cb(null, data);
-      }
-    });
+  db.pool.getConnection(function (err, connection) {
+    connection.query('INSERT INTO `users` SET ?', data,
+      function (err, result) {
+        if (err)
+          cb(err);
+        else if (result.affectedRows && result.affectedRows == 1) {
+          cb(null, data);
+        }
+      });
+  });
 };
