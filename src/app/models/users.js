@@ -1,7 +1,6 @@
 var uuid = require('node-uuid');
 
-var MySQL = require('./../db/index').MySQL;
-var db = new MySQL();
+var db = require('./../db/index').MySQL;
 
 /**
  * Find user by user identifier
@@ -14,6 +13,8 @@ exports.find = function (userID, cb) {
   db.pool.getConnection(function (err, connection) {
     connection.query("SELECT * FROM `users` WHERE id = '" + userID + "'",
       function (err, result) {
+        connection.end();
+
         if (err) {
           cb(err);
         } else if (result) {
@@ -41,6 +42,8 @@ exports.findByEmail = function (email, cb) {
   db.pool.getConnection(function (err, connection) {
     connection.query("SELECT * FROM `users` WHERE email = '" + email + "'",
       function (err, result) {
+        connection.end();
+
         if (err) {
           cb(err);
         } else if (result) {
@@ -71,6 +74,8 @@ exports.isAvailable = function (email, cb) {
   db.pool.getConnection(function (err, connection) {
     connection.query("SELECT * FROM `users` WHERE email = '" + email + "'",
       function (err, result) {
+        connection.end();
+
         if (err)
           cb(err);
         else if (!result.length)
@@ -96,11 +101,12 @@ exports.save = function (data, cb) {
   db.pool.getConnection(function (err, connection) {
     connection.query('INSERT INTO `users` SET ?', data,
       function (err, result) {
+        connection.end();
+
         if (err)
           cb(err);
-        else if (result.affectedRows && result.affectedRows == 1) {
+        else if (result.affectedRows && result.affectedRows == 1)
           cb(null, data);
-        }
       });
   });
 };

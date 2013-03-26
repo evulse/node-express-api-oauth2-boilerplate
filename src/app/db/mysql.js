@@ -54,13 +54,4 @@ function generateConfig () {
 /**
  * @param {Object} options connection options
  */
-var MySQL = function (options) {
-
-  options = arguments[0] || generateConfig();
-  var pool = mysql.createPool(options);
-
-  this.options = options;
-  this.pool = pool;
-};
-
-module.exports.MySQL = MySQL;
+exports.pool = mysql.createPool(generateConfig());
