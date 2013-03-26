@@ -3,10 +3,18 @@
  */
 var
   vows = require('vows'),
-  assert = require('assert');
+  assert = require('assert'),
+  mysql = require('mysql');
 
-var MySQL = require('./../../src/app/db/index').MySQL;
-var db = new MySQL();
+var connection = mysql.createConnection({
+  host: 'localhost',
+  user: 'ubuntu',
+  password: '',
+  database: 'circle_test'
+});
+
+connection.connect();
+
 var authCodeModel = require('./../../src/app/models/auth/authorizationcodes');
 
 /**
@@ -16,7 +24,7 @@ var authCodeModel = require('./../../src/app/models/auth/authorizationcodes');
 function dropTable (name) {
   var dropTable = 'DROP TABLE IF EXISTS `' + name + '`;';
 
-  db.connection.query(dropTable, this.callback);
+  connection.query(dropTable, this.callback);
 }
 
 /**
@@ -32,7 +40,7 @@ vows.describe('Scenario: Save authorization code')
     topic: function () {
       var dropTable = 'DROP TABLE IF EXISTS `authorization_request`;';
 
-      db.connection.query(dropTable, this.callback);
+      connection.query(dropTable, this.callback);
     },
     'after drop table': {
       topic: function () {
@@ -47,7 +55,7 @@ vows.describe('Scenario: Save authorization code')
           'KEY `user_id` (`user_id`)' +
           ') ENGINE=InnoDB DEFAULT CHARSET=utf8;';
 
-        db.connection.query(createTableStatement, this.callback);
+        connection.query(createTableStatement, this.callback);
       },
       'should create the table': function (err, result) {
         assert.isNull(err);
@@ -101,7 +109,7 @@ vows.describe('Scenario: Find authorization code')
     topic: function () {
       var dropTable = 'DROP TABLE IF EXISTS `authorization_request`;';
 
-      db.connection.query(dropTable, this.callback);
+      connection.query(dropTable, this.callback);
     },
     'should drop the table': function (err, result) {
       assert.isNull(err);
