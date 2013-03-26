@@ -1,5 +1,4 @@
-var MySQL = require('./../db/index').MySQL;
-var db = new MySQL();
+var db = require('./../db/index').MySQL;
 
 /**
  * Find client by record identifier.
@@ -13,6 +12,8 @@ exports.find = function (clientID, cb) {
     connection.query("SELECT * FROM `clients` " +
       "WHERE client_id = '" + clientID + "'",
       function (err, result) {
+        connection.end();
+
         if (err)
           cb(err);
         else if (result)
@@ -33,6 +34,8 @@ exports.findByClientId = function (clientID, cb) {
     connection.query("SELECT * FROM `clients` " +
       "WHERE client_id = '" + clientID + "'",
       function (err, result) {
+        connection.end();
+
         if (err) {
           cb(err);
         } else if (result[0]) {
@@ -59,9 +62,11 @@ exports.save = function (clientID, clientSecret, redirectURI, userID, cb) {
   db.pool.getConnection(function (err, connection) {
     connection.query('INSERT INTO `clients` SET ?',
       newClient, function (err, result) {
+      connection.end();
+
       if (err)
         cb(err);
-      else
+      else if (result.affectedRows && result.affectedRows == 1)
         cb(null, true);
     });
   });

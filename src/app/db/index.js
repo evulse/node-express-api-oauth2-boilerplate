@@ -1,1 +1,1 @@
-exports.MySQL = require('./mysql').MySQL;
+exports.MySQL = require('./mysql');

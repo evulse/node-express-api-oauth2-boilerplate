@@ -1,5 +1,4 @@
-var MySQL = require('./../../db/index').MySQL;
-var db = new MySQL();
+var db = require('./../../db/index').MySQL;
 
 /**
  * Find the saved Authorization Code
@@ -12,6 +11,9 @@ exports.find = function (key, cb) {
   db.pool.getConnection(function (err, connection) {
     connection.query("SELECT * FROM `authorization_request` " +
       "WHERE auth_code = '" + key + "'", function (err, record) {
+
+      connection.end();
+
       if (err) {
         cb(err);
       } else if (record[0]) {
@@ -45,6 +47,8 @@ exports.save = function (authCode, clientID, redirectURI, userID, cb) {
   db.pool.getConnection(function (err, connection) {
     connection.query('INSERT INTO `authorization_request` SET ?',
       newAuthCode, function (err, result) {
+      connection.end();
+      
       if (err)
         cb(err);
       else if (result.affectedRows && result.affectedRows == 1)
