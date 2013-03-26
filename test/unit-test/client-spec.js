@@ -5,10 +5,18 @@
 
 var
   vows = require('vows'),
-  assert = require('assert');
+  assert = require('assert'),
+  mysql = require('mysql');
 
-var MySQL = require('./../../src/app/db/index').MySQL;
-var db = new MySQL();
+var connection = mysql.createConnection({
+  host: 'localhost',
+  user: 'ubuntu',
+  password: '',
+  database: 'circle_test'
+});
+
+connection.connect();
+
 var clientsModel = require('./../../src/app/models/clients');
 
 /**
@@ -24,7 +32,7 @@ vows.describe('Scenario: Saving client credentials')
     topic: function () {
       var dropTable = 'DROP TABLE IF EXISTS `clients`;';
 
-      db.connection.query(dropTable, this.callback);
+      connection.query(dropTable, this.callback);
     },
     'after drop table': {
       topic: function () {
@@ -38,7 +46,7 @@ vows.describe('Scenario: Saving client credentials')
           'KEY `user_id` (`user_id`)' +
           ') ENGINE=InnoDB DEFAULT CHARSET=utf8;';
 
-        db.connection.query(createTableStatement, this.callback);
+        connection.query(createTableStatement, this.callback);
       },
       'should create the table': function (err, result) {
         assert.isNull(err);
@@ -108,11 +116,12 @@ vows.describe('Scenario: Find the clients')
     topic: function () {
       var dropTable = 'DROP TABLE IF EXISTS `clients`;';
 
-      db.connection.query(dropTable, this.callback);
+      connection.query(dropTable, this.callback);
     },
     'should drop the table': function (err, result) {
       assert.isNull(err);
       assert.isNotNull(result);
+      connection.end();
     }
   }
 })
