@@ -2,6 +2,7 @@
  * Authentication middlewares
  */
 var
+  crypto = require('crypto'),
   passport = require('passport'),
   LocalStrategy = require('passport-local').Strategy,
   BasicStrategy = require('passport-http').BasicStrategy,
@@ -16,12 +17,14 @@ var models = require('./../models/index');
 /**
  * LocalStrategy
  *
- * This strategy is used to authenticate users based on a username and password.
+ * This strategy is used to authenticate users based on a email and password.
  * Anytime a request is made to authorize an application, we must ensure that
  * a user is logged in before asking them to approve the request.
  */
 passport.use(new LocalStrategy(
   function (email, password, cb) {
+    password = crypto.createHash('sha1').update(password).digest('hex');
+
     models.users.findByEmail(email, function (err, user) {
       if (err) {
         return cb(err);
@@ -60,8 +63,8 @@ passport.deserializeUser(function (id, cb) {
  * the specification, in practice it is quite common.
  */
 passport.use(new BasicStrategy(
-  function (username, password, cb) {
-    models.clients.findByClientId(username, function (err, client) {
+  function (email, password, cb) {
+    models.clients.findByClientId(email, function (err, client) {
       if (err) {
         return cb(err);
       }
