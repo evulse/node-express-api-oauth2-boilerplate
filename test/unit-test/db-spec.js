@@ -26,24 +26,7 @@ vows.describe('Scenario: Connect to database')
     topic: db,
     'should return the connection': function (err, connection) {
       assert.isNull(err);
-      assert.isTrue(connection.connection._connectCalled);
-    }
-  }
-})
-  .export(module);
-
-vows.describe('Scenario: Close connection')
-  .addBatch({
-  '\nGiven the db connection is active': {
-    topic: db,
-    'after the object is instantiated': {
-      topic: function (db) {
-        db.end(this.callback);
-      },
-      'should end the connection': function (err, result) {
-        assert.isNull(err);
-        assert.isTrue(result);
-      }
+      assert.include(connection, 'pool');
     }
   }
 })
