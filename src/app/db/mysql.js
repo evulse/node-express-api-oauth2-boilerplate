@@ -54,38 +54,4 @@ function generateConfig () {
 /**
  * @param {Object} options connection options
  */
-var MySQL = function (options) {
-
-  options = arguments[0] || generateConfig();
-  var connection = mysql.createConnection(options);
-  connection.connect(function (err) {
-    if (err)
-      console.log('err', err);
-  });
-
-  this.connection = connection;
-};
-
-/**
- * Close connection
- *
- * @param {Function} cb callback function, will return true end successfully
- */
-MySQL.prototype.end = function (cb) {
-
-  var self = this;
-
-  if (self.connection) {
-    self.connection.end(function (err) {
-      if (err)
-        cb(null);
-      else
-        cb(null, true);
-    });
-  } else {
-    // connection already closed
-    cb(null, false);
-  }
-};
-
-module.exports.MySQL = MySQL;
+exports.pool = mysql.createPool(generateConfig());
