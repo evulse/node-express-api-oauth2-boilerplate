@@ -8,9 +8,6 @@ var
   request = require('request'),
   app = require('./../../src/app/app');
 
-var MySQL = require('./../../src/app/db/index').MySQL;
-var db = new MySQL();
-
 /**
  * Scenario: Unverified user should receive email verification link
  * Given client POST new user data in JSON

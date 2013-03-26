@@ -3,10 +3,18 @@
  */
 var
   vows = require('vows'),
-  assert = require('assert');
+  assert = require('assert'),
+  mysql = require('mysql');
 
-var MySQL = require('./../../src/app/db/index').MySQL;
-var db = new MySQL();
+var connection = mysql.createConnection({
+  host: 'localhost',
+  user: 'ubuntu',
+  password: '',
+  database: 'circle_test'
+});
+
+connection.connect();
+
 var usersModel = require('./../../src/app/models/users');
 var userID;
 /**
@@ -22,7 +30,7 @@ vows.describe('Scenario: Saving user credentials')
     topic: function () {
       var deleteRecord = "DELETE FROM `users` WHERE `email` = 'budi@ca.ca'";
 
-      db.connection.query(deleteRecord, this.callback);
+      connection.query(deleteRecord, this.callback);
     },
     'after drop table': {
       topic: function () {
@@ -39,7 +47,7 @@ vows.describe('Scenario: Saving user credentials')
           'UNIQUE KEY `email` (`email`)' +
           ') ENGINE=InnoDB DEFAULT CHARSET=utf8;';
 
-        db.connection.query(createTableStatement, this.callback);
+        connection.query(createTableStatement, this.callback);
       },
       'should create the table': function (err, result) {
         assert.isNull(err);
@@ -114,12 +122,12 @@ vows.describe('Scenario: Find the users')
   'Tear down': {
     topic: function () {
       var deleteRecord = "DELETE FROM `users` WHERE `email` = 'budi@ca.ca'";
-
-      db.connection.query(deleteRecord, this.callback);
+      connection.query(deleteRecord, this.callback);
     },
     'should drop the table': function (err, result) {
       assert.isNull(err);
       assert.isNotNull(result);
+      connection.end();
     }
   }
 })
