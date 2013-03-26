@@ -12,6 +12,7 @@ var
 /**
  * Internal dependencies
  */
+var db = require('./db/index').MySQL;
 
 var app = express();
 
