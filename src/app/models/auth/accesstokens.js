@@ -9,6 +9,9 @@ var db = require('./../../db/index').MySQL;
 exports.find = function (key, cb) {
 
   db.pool.getConnection(function (err, connection) {
+    if (err && err.code === 'PROTOCOL_CONNECTION_LOST')
+      db.handleDisconnect(connection);
+
     connection.query("SELECT * FROM access_token WHERE token = '" + key + "'",
       function (err, result) {
         if (err) {
@@ -42,6 +45,9 @@ exports.save = function (token, userID, clientID, cb) {
   };
 
   db.pool.getConnection(function (err, connection) {
+    if (err && err.code === 'PROTOCOL_CONNECTION_LOST')
+      db.handleDisconnect(connection);
+
     connection.query('INSERT INTO access_token SET ?', newAccessToken,
       function (err, result) {
         if (err) {

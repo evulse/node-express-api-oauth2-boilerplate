@@ -51,7 +51,26 @@ function generateConfig () {
   }
 }
 
+var pool;
+
+exports.handleDisconnect = function (connection) {
+  connection.on('error', function (err) {
+    if (!err.fatal) {
+      return;
+    }
+
+    if (err.code !== 'PROTOCOL_CONNECTION_LOST') {
+      throw err;
+    }
+
+    console.log('Re-connecting lost connection: ' + err.stack);
+
+    pool = mysql.createPool(generateConfig());
+  });
+};
+
 /**
  * @param {Object} options connection options
  */
-exports.pool = mysql.createPool(generateConfig());
+pool = mysql.createPool(generateConfig());
+exports.pool = pool;
