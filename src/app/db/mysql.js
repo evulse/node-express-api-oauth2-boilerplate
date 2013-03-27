@@ -53,7 +53,7 @@ function generateConfig () {
 
 var pool;
 
-exports.handleDisconnect = function handleDisconnect (connection) {
+exports.handleDisconnect = function (connection) {
   connection.on('error', function (err) {
     if (!err.fatal) {
       return;

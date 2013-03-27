@@ -11,7 +11,7 @@ var db = require('./../db/index').MySQL;
 exports.find = function (userID, cb) {
 
   db.pool.getConnection(function (err, connection) {
-    if (err.code === 'PROTOCOL_CONNECTION_LOST')
+    if (err && err.code === 'PROTOCOL_CONNECTION_LOST')
       db.handleDisconnect(connection);
 
     connection.query("SELECT * FROM `users` WHERE id = '" + userID + "'",
@@ -43,7 +43,7 @@ exports.find = function (userID, cb) {
 exports.findByEmail = function (email, cb) {
 
   db.pool.getConnection(function (err, connection) {
-    if (err.code === 'PROTOCOL_CONNECTION_LOST')
+    if (err && err.code === 'PROTOCOL_CONNECTION_LOST')
       db.handleDisconnect(connection);
 
     connection.query("SELECT * FROM `users` WHERE email = '" + email + "'",
@@ -78,7 +78,7 @@ exports.isAvailable = function (email, cb) {
     cb(null, 'email_required');
 
   db.pool.getConnection(function (err, connection) {
-    if (err.code === 'PROTOCOL_CONNECTION_LOST')
+    if (err && err.code === 'PROTOCOL_CONNECTION_LOST')
       db.handleDisconnect(connection);
 
     connection.query("SELECT * FROM `users` WHERE email = '" + email + "'",
@@ -108,9 +108,9 @@ exports.save = function (data, cb) {
   data.verified = 0;
 
   db.pool.getConnection(function (err, connection) {
-    if (err.code === 'PROTOCOL_CONNECTION_LOST')
+    if (err && err.code === 'PROTOCOL_CONNECTION_LOST')
       db.handleDisconnect(connection);
-    
+
     connection.query('INSERT INTO `users` SET ?', data,
       function (err, result) {
         connection.end();
