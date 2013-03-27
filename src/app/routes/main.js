@@ -13,7 +13,15 @@ exports.loginForm = function (req, res) {
   res.render('login');
 };
 
-exports.login = passport.authenticate('local', {successReturnToOrRedirect: '/', failureRedirect: '/login'});
+exports.login = [
+  function (req, res, next) {
+    req.body.username = req.body.email;
+    delete req.body.email;
+    next();
+  },
+  passport.authenticate('local', {successReturnToOrRedirect: '/account',
+    failureRedirect: '/login'})
+];
 
 exports.logout = function (req, res) {
   req.logout();
