@@ -9,7 +9,7 @@ var db = require('./../db/index').MySQL;
 exports.find = function (clientID, cb) {
 
   db.pool.getConnection(function (err, connection) {
-    if (err.code === 'PROTOCOL_CONNECTION_LOST')
+    if (err && err.code === 'PROTOCOL_CONNECTION_LOST')
       db.handleDisconnect(connection);
 
     connection.query("SELECT * FROM `clients` " +
@@ -34,7 +34,7 @@ exports.find = function (clientID, cb) {
 exports.findByClientId = function (clientID, cb) {
 
   db.pool.getConnection(function (err, connection) {
-    if (err.code === 'PROTOCOL_CONNECTION_LOST')
+    if (err && err.code === 'PROTOCOL_CONNECTION_LOST')
       db.handleDisconnect(connection);
 
     connection.query("SELECT * FROM `clients` " +
@@ -66,9 +66,9 @@ exports.save = function (clientID, clientSecret, redirectURI, userID, cb) {
   };
 
   db.pool.getConnection(function (err, connection) {
-    if (err.code === 'PROTOCOL_CONNECTION_LOST')
+    if (err && err.code === 'PROTOCOL_CONNECTION_LOST')
       db.handleDisconnect(connection);
-    
+
     connection.query('INSERT INTO `clients` SET ?',
       newClient, function (err, result) {
       connection.end();

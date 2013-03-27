@@ -9,7 +9,7 @@ var db = require('./../../db/index').MySQL;
 exports.find = function (key, cb) {
 
   db.pool.getConnection(function (err, connection) {
-    if (err.code === 'PROTOCOL_CONNECTION_LOST')
+    if (err && err.code === 'PROTOCOL_CONNECTION_LOST')
       db.handleDisconnect(connection);
 
     connection.query("SELECT * FROM `authorization_request` " +
@@ -48,9 +48,9 @@ exports.save = function (authCode, clientID, redirectURI, userID, cb) {
   };
 
   db.pool.getConnection(function (err, connection) {
-    if (err.code === 'PROTOCOL_CONNECTION_LOST')
+    if (err && err.code === 'PROTOCOL_CONNECTION_LOST')
       db.handleDisconnect(connection);
-    
+
     connection.query('INSERT INTO `authorization_request` SET ?',
       newAuthCode, function (err, result) {
       connection.end();
