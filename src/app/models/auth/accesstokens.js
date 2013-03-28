@@ -1,4 +1,5 @@
 var db = require('./../../db/index').MySQL;
+var connection = db.getConnection();
 
 /**
  * Find the saved Access Token
@@ -8,24 +9,18 @@ var db = require('./../../db/index').MySQL;
  */
 exports.find = function (key, cb) {
 
-  db.pool.getConnection(function (err, connection) {
-    if (err && err.code === 'PROTOCOL_CONNECTION_LOST')
-      db.handleDisconnect(connection);
-
-    connection.query("SELECT * FROM access_token WHERE token = '" + key + "'",
-      function (err, result) {
-        if (err) {
-          cb(err);
-        } else if (result[0]) {
-          connection.end();
-          cb(null, {
-            clientID: result[0].client_id,
-            userID: result[0].user_id,
-            token: result[0].token
-          });
-        }
-      });
-  });
+  connection.query("SELECT * FROM access_token WHERE token = '" + key + "'",
+    function (err, result) {
+      if (err) {
+        cb(err);
+      } else if (result[0]) {
+        cb(null, {
+          clientID: result[0].client_id,
+          userID: result[0].user_id,
+          token: result[0].token
+        });
+      }
+    });
 };
 
 /**
@@ -44,18 +39,12 @@ exports.save = function (token, userID, clientID, cb) {
     token: token
   };
 
-  db.pool.getConnection(function (err, connection) {
-    if (err && err.code === 'PROTOCOL_CONNECTION_LOST')
-      db.handleDisconnect(connection);
-
-    connection.query('INSERT INTO access_token SET ?', newAccessToken,
-      function (err, result) {
-        if (err) {
-          cb(err);
-        } else if (result.affectedRows && result.affectedRows == 1) {
-          connection.end();
-          cb(null, true);
-        }
-      });
-  });
+  connection.query('INSERT INTO access_token SET ?', newAccessToken,
+    function (err, result) {
+      if (err) {
+        cb(err);
+      } else if (result.affectedRows && result.affectedRows == 1) {
+        cb(null, true);
+      }
+    });
 };

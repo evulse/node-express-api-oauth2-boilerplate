@@ -1,4 +1,5 @@
 var db = require('./../../db/index').MySQL;
+var connection = db.getConnection();
 
 /**
  * Find the saved Authorization Code
@@ -8,26 +9,19 @@ var db = require('./../../db/index').MySQL;
  */
 exports.find = function (key, cb) {
 
-  db.pool.getConnection(function (err, connection) {
-    if (err && err.code === 'PROTOCOL_CONNECTION_LOST')
-      db.handleDisconnect(connection);
 
-    connection.query("SELECT * FROM `authorization_request` " +
-      "WHERE auth_code = '" + key + "'", function (err, record) {
-
-      connection.end();
-
-      if (err) {
-        cb(err);
-      } else if (record[0]) {
-        cb(null, {
-          authCode: record[0].auth_code,
-          redirectURI: record[0].redirect_uri,
-          clientID: record[0].client_id,
-          userID: record[0].user_id
-        });
-      }
-    });
+  connection.query("SELECT * FROM `authorization_request` " +
+    "WHERE auth_code = '" + key + "'", function (err, record) {
+    if (err) {
+      cb(err);
+    } else if (record[0]) {
+      cb(null, {
+        authCode: record[0].auth_code,
+        redirectURI: record[0].redirect_uri,
+        clientID: record[0].client_id,
+        userID: record[0].user_id
+      });
+    }
   });
 };
 
@@ -47,18 +41,11 @@ exports.save = function (authCode, clientID, redirectURI, userID, cb) {
     user_id: userID
   };
 
-  db.pool.getConnection(function (err, connection) {
-    if (err && err.code === 'PROTOCOL_CONNECTION_LOST')
-      db.handleDisconnect(connection);
-
-    connection.query('INSERT INTO `authorization_request` SET ?',
-      newAuthCode, function (err, result) {
-      connection.end();
-
-      if (err)
-        cb(err);
-      else if (result.affectedRows && result.affectedRows == 1)
-        cb(null, true);
-    });
+  connection.query('INSERT INTO `authorization_request` SET ?',
+    newAuthCode, function (err, result) {
+    if (err)
+      cb(err);
+    else if (result.affectedRows && result.affectedRows == 1)
+      cb(null, true);
   });
 };
