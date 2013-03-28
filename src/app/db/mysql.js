@@ -51,26 +51,30 @@ function generateConfig () {
   }
 }
 
-var pool;
+module.exports.getConnection = function () {
 
-exports.handleDisconnect = function (connection) {
-  connection.on('error', function (err) {
-    if (!err.fatal) {
-      return;
-    }
+  // Test connection health before returning it to caller.
+  if ((module.exports.connection) && (module.exports.connection._socket)
+    && (module.exports.connection._socket.readable)
+    && (module.exports.connection._socket.writable)) {
+    return module.exports.connection;
+  }
 
-    if (err.code !== 'PROTOCOL_CONNECTION_LOST') {
-      throw err;
-    }
+  console.log(((module.exports.connection) ?
+    'UNHEALTHY SQL CONNECTION; RE' : '') + 'CONNECTING TO SQL.');
 
-    console.log('Re-connecting lost connection: ' + err.stack);
+  var connection = mysql.createConnection(generateConfig());
 
-    pool = mysql.createPool(generateConfig());
+  connection.connect(function (err) {});
+
+  connection.on('close', function (err) {
+    console.log('SQL CONNECTION CLOSED.');
   });
-};
 
-/**
- * @param {Object} options connection options
- */
-pool = mysql.createPool(generateConfig());
-exports.pool = pool;
+  connection.on('error', function (err) {
+    connection.connect(function (err) {});
+  });
+
+  module.exports.connection = connection;
+  return module.exports.connection;
+};
