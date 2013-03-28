@@ -13,20 +13,20 @@ vows.describe('Scenario: Require the module')
   '\nGiven module loaded': {
     topic: db,
     'should contained a pool': function (topic) {
-      assert.include(topic, 'pool');
+      assert.include(topic, 'getConnection');
+      assert.isFunction(topic.getConnection);
     }
   }
-});
+})
+.export(module);
 
 vows.describe('Scenario: Get database connection')
   .addBatch({
   '\nGiven the object is instantiate': {
-    topic: function () {
-      db.pool.getConnection(this.callback);
-    },
+    topic: db.getConnection(),
     'should return the connection': function (err, connection) {
       assert.isNull(err);
-      assert.isNotNull(connection)
+      assert.isNotNull(connection);
       assert.isTrue(connection._connectCalled);
     }
   }
