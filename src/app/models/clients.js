@@ -1,31 +1,6 @@
 var db = require('./../db/index').MySQL;
 
 /**
- * Find client by record identifier.
- *
- * @param {String} clientID client identifier in UUID format
- * @param {Function} cb will return the result if the client exists
- */
-exports.find = function (clientID, cb) {
-
-  db.pool.getConnection(function (err, connection) {
-    if (err && err.code === 'PROTOCOL_CONNECTION_LOST')
-      db.handleDisconnect(connection);
-
-    connection.query("SELECT * FROM `clients` " +
-      "WHERE client_id = '" + clientID + "'",
-      function (err, result) {
-        connection.end();
-
-        if (err)
-          cb(err);
-        else if (result)
-          cb(null, result);
-      });
-  });
-};
-
-/**
  * Find client by client identifier
  *
  * @param {String} clientID client identifier in UUID format
