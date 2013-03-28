@@ -6,6 +6,16 @@ Express REST API Boilerplate
 The actual REST API server source code is located under `src/app`. The REST API
 server currently is deployed in Heroku http://evulse-express-api.herokuapp.com/
 
+### Development
+
+To run the app on local environment just follow this steps:
+
+1. Import the MySQL dump to your local MySQL server, the MySQL dump is located
+on `src/database/express-api-boilerplate-dev.sql`
+
+2. Start the app by run server, go to directory `src/app/` and run
+`foreman start`
+
 ## Documentations
 
 REST API documentations is located on
