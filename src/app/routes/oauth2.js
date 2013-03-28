@@ -24,7 +24,7 @@ var server = oauth2orize.createServer();
 // the client by ID from the database.
 
 server.serializeClient(function (client, cb) {
-  return cb(null, client.id);
+  return cb(null, client.clientID);
 });
 
 server.deserializeClient(function (id, cb) {
@@ -54,7 +54,7 @@ server.grant(oauth2orize.grant.code(function (client, redirectURI, user, ares, c
 
   var code = utils.uid(16);
 
-  models.authorizationCodes.save(code, client.id, redirectURI, user.id,
+  models.authorizationCodes.save(code, client.clientID, redirectURI, user.id,
     function (err) {
       if (err) {
         return cb(err);
