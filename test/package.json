@@ -14,7 +14,6 @@
   "devDependencies": {
     "request": "2.11.x",
     "vows": "0.6.x",
-    "zombie": "2.0.x",
     "oauth": "0.9.x",
     "mysql": "*"
   },
