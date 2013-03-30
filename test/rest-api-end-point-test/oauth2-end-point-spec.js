@@ -3,18 +3,11 @@
  */
 
 var
-  Browser = require('zombie'),
   OAuth2 = require('oauth').OAuth2,
   vows = require('vows'),
   request = require('request'),
   assert = require('assert'),
   app = require('./../../src/app/app');
-
-var constructedURI = 'http://localhost:5000/dialog/authorize?' +
-  'response_type=code&' +
-  'client_id=c67f0160-7aad-4aa5-8a88-92bbd6f02a4c&' +
-  'scope=*&' +
-  'redirect_uri=' + encodeURIComponent('http://localhost:5000/test/callback');
 
 /**
  * Scenario: Able to access protected resource
