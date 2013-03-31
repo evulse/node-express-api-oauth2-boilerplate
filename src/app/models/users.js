@@ -95,3 +95,34 @@ exports.save = function (data, cb) {
         cb(null, data);
     });
 };
+
+/**
+ * Save verification token into DB
+ *
+ * @param {String} email valid email address
+ * @param {String} token verification token string in SHA-1
+ * @param {Function} cb will return true if the token is saved
+ */
+exports.saveVerificationToken = function (email, token, cb) {
+
+  connection.query("SELECT * FROM `users` WHERE email = '" + email + "';",
+    function (err, result) {
+      if (err)
+        cb(err);
+      else if (result.length >= 1) {
+        var userID = result[0].id;
+        var data = {
+          user_id: userID,
+          token: token
+        };
+
+        connection.query("INSERT INTO `verification_token` SET ?", data,
+          function (err, result) {
+            if (err)
+              cb(err);
+            else if (result.affectedRows && result.affectedRows == 1)
+              cb(null, true);
+          });
+      }
+    });
+};

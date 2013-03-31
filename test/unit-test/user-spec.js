@@ -28,7 +28,8 @@ vows.describe('Scenario: Saving user credentials')
   .addBatch({
   'Set Up': {
     topic: function () {
-      var deleteRecord = "DELETE FROM `users` WHERE `email` = 'budi@ca.ca'";
+      var deleteRecord = "DELETE FROM `users` WHERE " +
+        "`email` = 'muhammadghazali2480@gmail.com'";
 
       connection.query(deleteRecord, this.callback);
     },
@@ -61,12 +62,12 @@ vows.describe('Scenario: Saving user credentials')
     'When we save the user credentials': {
       topic: function () {
         var newUser = {
-          email: 'budi@ca.ca',
+          email: 'muhammadghazali2480@gmail.com',
           password: '5baa61e4c9b93f3f0682250b6cf8331b7ee68fd8',
           confirm_password: '5baa61e4c9b93f3f0682250b6cf8331b7ee68fd8',
-          first_name: 'Budi',
-          last_name: 'Dharmawan',
-          full_name: 'Budi Dharmawan'
+          first_name: 'Muhammad',
+          last_name: 'Ghazali',
+          full_name: 'Muhammad Ghazali'
         };
         usersModel.save(newUser, this.callback);
       },
@@ -89,7 +90,7 @@ vows.describe('Scenario: Saving user credentials')
  */
 vows.describe('Scenario: Find the users')
   .addBatch({
-  'Given acess_token is saved': {
+  'Given users is saved': {
     'When find the users': {
       topic: function () {
         usersModel.find(userID,
@@ -104,10 +105,10 @@ vows.describe('Scenario: Find the users')
   }
 })
   .addBatch({
-  'Given acess_token is saved': {
+  'Given users is saved': {
     'When find the users': {
       topic: function () {
-        usersModel.findByEmail('budi@ca.ca',
+        usersModel.findByEmail('muhammadghazali2480@gmail.com',
           this.callback);
       },
       'should return the requested users record': function (err, result) {
@@ -118,16 +119,67 @@ vows.describe('Scenario: Find the users')
     }
   }
 })
+  .export(module);
+
+/**
+ * Scenario: Save the email verification token
+ *
+ * Given we sent the email verification link
+ * verification table is empty
+ * When save the email verification token
+ * Then the verification_table should be have one row
+ */
+vows.describe('Scenario: Save the email verification token')
+  .addBatch({
+  'Set Up': {
+    'Create table': {
+      topic: function () {
+        var createTableStatement = 'CREATE TABLE IF NOT EXISTS ' +
+          '`verification_token` (' +
+          '`token` varchar(40) NOT NULL,' +
+          '`user_id` varchar(36) NOT NULL,' +
+          'KEY `user_id` (`user_id`)' +
+          ') ENGINE=InnoDB DEFAULT CHARSET=utf8;';
+
+        connection.query(createTableStatement, this.callback);
+      },
+      'delete record': {
+        topic: function (err, result) {
+          var deleteRecord = "DELETE FROM `verification_token` WHERE " +
+            "`user_id` = '" + userID + "';";
+
+          connection.query(deleteRecord, this.callback);
+        },
+        'should delete record': function (err, result) {
+          assert.isNull(err);
+        }
+      }
+    }
+  }
+})
+  .addBatch({
+  'When save the email verification token': {
+    topic: function () {
+      usersModel.saveVerificationToken('muhammadghazali2480@gmail.com',
+        '24cf8c5b6a11160634042644819284717cee1495', this.callback);
+    },
+    'the verification_table should be have one row': function (err, result) {
+      assert.isNull(err);
+      assert.isTrue(result);
+    }
+  }
+})
   .addBatch({
   'Tear down': {
     topic: function () {
-      var deleteRecord = "DELETE FROM `users` WHERE `email` = 'budi@ca.ca'";
+      var deleteRecord = "DELETE FROM `verification_token` WHERE " +
+        "`user_id` = '" + userID + "';";
       connection.query(deleteRecord, this.callback);
     },
-    'should drop the table': function (err, result) {
+    'should delete the record': function (err, result) {
       assert.isNull(err);
       assert.isNotNull(result);
-      connection.end();
+      assert.equal(result.affectedRows, 1);
     }
   }
 })
