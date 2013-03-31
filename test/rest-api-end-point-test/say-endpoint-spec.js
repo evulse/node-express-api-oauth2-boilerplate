@@ -6,8 +6,9 @@ var
   OAuth2 = require('oauth').OAuth2,
   vows = require('vows'),
   assert = require('assert'),
-  request = require('request'),
-  app = require('./../../src/app/app');
+  request = require('request');
+
+var app = require('./../../src/app/app');
 
 /**
  * Scenario: Retrieve JSON resource

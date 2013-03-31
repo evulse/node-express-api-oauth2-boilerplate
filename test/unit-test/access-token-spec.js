@@ -4,19 +4,11 @@
 
 var
   vows = require('vows'),
-  assert = require('assert'),
-  mysql = require('mysql');
+  assert = require('assert');
 
-var connection = mysql.createConnection({
-  host: 'localhost',
-  user: 'ubuntu',
-  password: '',
-  database: 'circle_test'
-});
-
-connection.connect();
-
-var accessTokenModel = require('./../../src/app/models/auth/accesstokens');
+var
+  connection = require('./../helper/db'),
+  accessTokenModel = require('./../../src/app/models/auth/accesstokens');
 
 /**
  * Scenario: Save access token
