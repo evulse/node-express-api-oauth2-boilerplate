@@ -3,19 +3,12 @@
  */
 var
   vows = require('vows'),
-  assert = require('assert'),
-  mysql = require('mysql');
+  assert = require('assert');
 
-var connection = mysql.createConnection({
-  host: 'localhost',
-  user: 'ubuntu',
-  password: '',
-  database: 'circle_test'
-});
+var
+  connection = require('./../helper/db'),
+  usersModel = require('./../../src/app/models/users');
 
-connection.connect();
-
-var usersModel = require('./../../src/app/models/users');
 var userID;
 /**
  * Scenario: Saving user credentials
@@ -33,8 +26,8 @@ vows.describe('Scenario: Saving user credentials')
 
       connection.query(deleteRecord, this.callback);
     },
-    'after drop table': {
-      topic: function () {
+    'after delete record': {
+      topic: function (err, result) {
         var createTableStatement = 'CREATE TABLE IF NOT EXISTS `users` (' +
           '`id` varchar(36) NOT NULL,' +
           '`email` varchar(254) NOT NULL,' +
@@ -72,9 +65,9 @@ vows.describe('Scenario: Saving user credentials')
         usersModel.save(newUser, this.callback);
       },
       'we should have one unique row saved': function (err, result) {
+        userID = result.id;
         assert.isNull(err);
         assert.isObject(result);
-        userID = result.id;
       }
     }
   }
@@ -143,7 +136,7 @@ vows.describe('Scenario: Save the email verification token')
 
         connection.query(createTableStatement, this.callback);
       },
-      'delete record': {
+      'after create table': {
         topic: function (err, result) {
           var deleteRecord = "DELETE FROM `verification_token` WHERE " +
             "`user_id` = '" + userID + "';";

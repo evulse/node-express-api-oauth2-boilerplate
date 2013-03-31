@@ -5,22 +5,11 @@
 var
   vows = require('vows'),
   assert = require('assert'),
-  request = require('request'),
-  app = require('./../../src/app/app');
+  request = require('request')
 
 var
-  vows = require('vows'),
-  assert = require('assert'),
-  mysql = require('mysql');
-
-var connection = mysql.createConnection({
-  host: 'localhost',
-  user: 'ubuntu',
-  password: '',
-  database: 'circle_test'
-});
-
-connection.connect();
+  app = require('./../../src/app/app'),
+  connection = require('./../helper/db');
 
 /**
  * Scenario: Unverified user should receive email verification link
@@ -45,7 +34,7 @@ vows.describe('Scenario: Scenario: Unverified user should receive email verifica
       connection.query(deleteRecord, this.callback);
     },
     'after drop table': {
-      topic: function () {
+      topic: function (err, result) {
         var createTableStatement = 'CREATE TABLE IF NOT EXISTS `users` (' +
           '`id` varchar(36) NOT NULL,' +
           '`email` varchar(254) NOT NULL,' +
