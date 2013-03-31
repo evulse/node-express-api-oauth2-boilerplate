@@ -57,6 +57,61 @@ function validateNewUserData (data, cb) {
 }
 
 /**
+ * Send email verification link
+ *
+ * @param {String}  params email params
+ *                  params.to unverified email address
+ *                  params.from set custom from email address
+ *                  params.subject set custom email subject
+ *                  params.text set custom email content
+ * @param {Function} cb callback function
+ */
+exports.sendEmailVerification = function (params, cb) {
+
+  var SendGrid = require('sendgrid').SendGrid;
+  var sd = new SendGrid(process.env.SENDGRID_USERNAME,
+    process.env.SENDGRID_PASSWORD);
+
+  if (params.to == null && params.to === '')
+    cb(new Error('We need a valid email address to send email verification ' +
+      'link'), null);
+
+  var to = params.to;
+  var subject = params.subject || 'Please verify the email address for ' +
+    'your Express API Boilerplate Account';
+  var from = params.from || 'boilerplate@evulse.com';
+
+  // token is the email + milliseconds
+  var unhashedToken = to + Date.now().toString();
+  var crypto = require('crypto');
+  var token = crypto.createHash('sha1').update(unhashedToken)
+    .digest('hex');
+  var verificationLink = 'http://sheltered-reef-5266.herokuapp.com/user/' +
+    'verify/' + token;
+
+  // save the token, than sent it afterward
+  usersModel.saveVerificationToken(to, token, function (err, result) {
+    if (err)
+      cb(err);
+    else if (result) {
+      if (to) {
+        sd.send({
+          to: to,
+          from: from,
+          subject: subject,
+          text: verificationLink
+        }, function (success, message) {
+          if (!success)
+            cb(new Error(message), true);
+          else if (success)
+            cb(null, true);
+        });
+      }
+    }
+  });
+};
+
+/**
  * @param {Object} req HTTP request object
  * @param {Object} res HTTP response object
  */
@@ -79,7 +134,7 @@ exports.create = function (req, res) {
             utils.output(res, 500, {"message": err.toString()});
           } else if ((typeof userDoc === 'object') && userDoc) {
             // send email verification link
-            utils.sendEmailVerification({to: data.email},
+            module.exports.sendEmailVerification({to: data.email},
             function (err, isSent) {
               if (err)
                 utils.output(res, 500, {"message": err.toString()});
