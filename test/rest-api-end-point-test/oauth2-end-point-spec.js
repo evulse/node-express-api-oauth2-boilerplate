@@ -6,8 +6,9 @@ var
   OAuth2 = require('oauth').OAuth2,
   vows = require('vows'),
   request = require('request'),
-  assert = require('assert'),
-  app = require('./../../src/app/app');
+  assert = require('assert');
+
+var app = require('./../../src/app/app');
 
 /**
  * Scenario: Able to access protected resource

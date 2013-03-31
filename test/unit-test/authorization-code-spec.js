@@ -3,19 +3,11 @@
  */
 var
   vows = require('vows'),
-  assert = require('assert'),
-  mysql = require('mysql');
+  assert = require('assert');
 
-var connection = mysql.createConnection({
-  host: 'localhost',
-  user: 'ubuntu',
-  password: '',
-  database: 'circle_test'
-});
-
-connection.connect();
-
-var authCodeModel = require('./../../src/app/models/auth/authorizationcodes');
+var
+  connection = require('./../helper/db'),
+  authCodeModel = require('./../../src/app/models/auth/authorizationcodes');
 
 /**
  * Test suite macros
