@@ -113,6 +113,18 @@ INSERT INTO `users` (`id`, `email`, `password`, `confirm_password`, `first_name`
 ('912ac711-8b2e-44c6-a088-cb8cf5ab4916', 'test@test.com', '5baa61e4c9b93f3f0682250b6cf8331b7ee68fd8', '5baa61e4c9b93f3f0682250b6cf8331b7ee68fd8', 'Test first name', 'Test Last name', 'Test full name', 0),
 ('a2bf9b0f-198f-4df5-a396-590a007785bd', 'muhammadghazali@gmail.com', '5baa61e4c9b93f3f0682250b6cf8331b7ee68fd8', '5baa61e4c9b93f3f0682250b6cf8331b7ee68fd8', 'Muhammad', 'Ghazali', 'Muhammad Ghazali', 0);
 
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `verification_token`
+--
+
+CREATE TABLE IF NOT EXISTS `verification_token` (
+  `token` varchar(40) NOT NULL,
+  `user_id` varchar(36) NOT NULL,
+  KEY `user_id` (`user_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
 --
 -- Constraints for dumped tables
 --
@@ -129,6 +141,12 @@ ALTER TABLE `access_token`
 --
 ALTER TABLE `clients`
   ADD CONSTRAINT `clients_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`);
+
+--
+-- Constraints for table `verification_token`
+--
+ALTER TABLE `verification_token`
+  ADD CONSTRAINT `verification_token_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`);
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
