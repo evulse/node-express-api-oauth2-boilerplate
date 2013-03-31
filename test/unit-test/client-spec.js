@@ -5,19 +5,11 @@
 
 var
   vows = require('vows'),
-  assert = require('assert'),
-  mysql = require('mysql');
+  assert = require('assert');
 
-var connection = mysql.createConnection({
-  host: 'localhost',
-  user: 'ubuntu',
-  password: '',
-  database: 'circle_test'
-});
-
-connection.connect();
-
-var clientsModel = require('./../../src/app/models/clients');
+var
+  connection = require('./../helper/db'),
+  clientsModel = require('./../../src/app/models/clients');
 
 /**
  * Scenario: Saving client credentials
@@ -106,7 +98,6 @@ vows.describe('Scenario: Find the clients')
     'should drop the table': function (err, result) {
       assert.isNull(err);
       assert.isNotNull(result);
-      connection.end();
     }
   }
 })
