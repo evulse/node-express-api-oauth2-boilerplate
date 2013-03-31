@@ -8,6 +8,20 @@ var
   request = require('request'),
   app = require('./../../src/app/app');
 
+var
+  vows = require('vows'),
+  assert = require('assert'),
+  mysql = require('mysql');
+
+var connection = mysql.createConnection({
+  host: 'localhost',
+  user: 'ubuntu',
+  password: '',
+  database: 'circle_test'
+});
+
+connection.connect();
+
 /**
  * Scenario: Unverified user should receive email verification link
  * Given client POST new user data in JSON
@@ -22,6 +36,38 @@ var
  * And the REST API should contain JSON resource (email, first_name, last_name, name, verified)
  */
 vows.describe('Scenario: Scenario: Unverified user should receive email verification link')
+  .addBatch({
+  'Set Up': {
+    topic: function () {
+      var deleteRecord = "DELETE FROM `users` WHERE " +
+        "`email` = 'muhammadghazali2480@gmail.com'";
+
+      connection.query(deleteRecord, this.callback);
+    },
+    'after drop table': {
+      topic: function () {
+        var createTableStatement = 'CREATE TABLE IF NOT EXISTS `users` (' +
+          '`id` varchar(36) NOT NULL,' +
+          '`email` varchar(254) NOT NULL,' +
+          '`password` varchar(40) NOT NULL,' +
+          '`confirm_password` varchar(40) NOT NULL,' +
+          '`first_name` varchar(50) NOT NULL,' +
+          '`last_name` varchar(50) NOT NULL,' +
+          '`full_name` varchar(100) NOT NULL,' +
+          '`verified` tinyint(1) NOT NULL,' +
+          'PRIMARY KEY (`id`),' +
+          'UNIQUE KEY `email` (`email`)' +
+          ') ENGINE=InnoDB DEFAULT CHARSET=utf8;';
+
+        connection.query(createTableStatement, this.callback);
+      },
+      'should create the table': function (err, result) {
+        assert.isNull(err);
+        assert.isNotNull(result);
+      }
+    }
+  }
+})
   .addBatch({
   "\nWhen client POST request hit the API end point": {
     topic: function () {
