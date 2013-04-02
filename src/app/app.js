@@ -14,13 +14,12 @@ var
  */
 var db = require('./db/index').MySQL;
 
-var app = express();
+var app = module.exports = express();
 
 app.configure(function () {
   app.set('port', process.env.PORT || 3000);
   app.set('views', __dirname + '/views');
   app.set('view engine', 'ejs');
-  app.use(express.static(path.join(__dirname, 'public')));
   app.use(express.favicon());
   app.use(express.logger('dev'));
   app.use(express.cookieParser());
@@ -32,30 +31,19 @@ app.configure(function () {
   app.use(passport.initialize());
   app.use(passport.session());
   app.use(app.router);
+  app.use(express.static(path.join(__dirname, 'public')));
 });
 
 app.configure('production', function () {
-  console.log('Setup production configs');
-  app.use(express.logger('dev'));
-  app.use(express.bodyParser());
   app.use(express.errorHandler());
-  app.use(app.router);
 });
 
 app.configure('development', function () {
-  console.log('Setup development configs');
-  app.use(express.logger('dev'));
-  app.use(express.bodyParser());
-  app.use(express.errorHandler());
-  app.use(app.router);
+  app.use(express.errorHandler({dumpException: true, showStack: true}));
 });
 
 app.configure('testing', function () {
-  console.log('Setup testing configs');
-  app.use(express.logger('dev'));
-  app.use(express.bodyParser());
-  app.use(express.errorHandler());
-  app.use(app.router);
+  app.use(express.errorHandler({dumpException: true, showStack: true}));
 });
 
 // Since this is the last non-error-handling
@@ -132,5 +120,5 @@ app.get('/test/callback', function (req, res) {
 
 var port = process.env.PORT || 5000;
 app.listen(port, function () {
-  console.log('Listening on ' + port);
+  console.log('Listening on port %d in %s mode', port, app.settings.env);
 });
