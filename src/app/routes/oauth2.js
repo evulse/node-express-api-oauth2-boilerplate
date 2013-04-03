@@ -50,7 +50,8 @@ server.deserializeClient(function (id, cb) {
 // the application.  The application issues a code, which is bound to these
 // values, and will be exchanged for an access token.
 
-server.grant(oauth2orize.grant.code(function (client, redirectURI, user, ares, cb) {
+server.grant(oauth2orize.grant.code(function (client, redirectURI, user,
+  ares, cb) {
 
   var code = utils.uid(16);
 
@@ -69,7 +70,8 @@ server.grant(oauth2orize.grant.code(function (client, redirectURI, user, ares, c
 // application issues an access token on behalf of the user who authorized the
 // code.
 
-server.exchange(oauth2orize.exchange.code(function (client, code, redirectURI, cb) {
+server.exchange(oauth2orize.exchange.code(function (client, code,
+  redirectURI, cb) {
   models.authorizationCodes.find(code, function (err, record) {
     if (err) {
       return cb(err);
@@ -82,12 +84,13 @@ server.exchange(oauth2orize.exchange.code(function (client, code, redirectURI, c
     }
 
     var token = utils.uid(256);
-    models.accessTokens.save(token, record.userID, record.clientID, function (err) {
-      if (err) {
-        return cb(err);
-      }
-      cb(null, token);
-    });
+    models.accessTokens.save(token, record.userID, record.clientID,
+      function (err) {
+        if (err) {
+          return cb(err);
+        }
+        cb(null, token);
+      });
   });
 }));
 
@@ -106,8 +109,8 @@ server.exchange(oauth2orize.exchange.code(function (client, code, redirectURI, c
 // This middleware simply initializes a new authorization transaction.  It is
 // the application's responsibility to authenticate the user and render a dialog
 // to obtain their approval (displaying details about the client requesting
-// authorization).  We accomplish that here by routing through `ensureLoggedIn()`
-// first, and rendering the `dialog` view.
+// authorization).  We accomplish that here by routing through
+// `ensureLoggedIn()` first, and rendering the `dialog` view.
 
 exports.authorization = [
   login.ensureLoggedIn(),
@@ -116,10 +119,9 @@ exports.authorization = [
       if (err) {
         return cb(err);
       }
-      // WARNING: For security purposes, it is highly advisable to check that
-      //          redirectURI provided by the client matches one registered with
-      //          the server.  For simplicity, this example does not.  You have
-      //          been warned.
+
+      // check that redirectURI provided by the client matches one registered
+      // with the server
       return cb(null, client, redirectURI);
     });
   }),
