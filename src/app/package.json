@@ -1,0 +1,40 @@
+{
+  "name": "express-api-boilerplate",
+  "version": "0.1.0",
+  "author": "Evulse",
+  "description": "Express REST API boilerplate.",
+  "contributors": [
+    {
+      "name": "Muhammad Ghazali",
+      "email": "muhammadghazali2480@gmail.com"
+    }
+  ],
+  "private": true,
+  "scripts": {
+    "start": "node app",
+    "test": "vows --spec --isolate"
+  },
+  "dependencies": {
+    "express": "3.1.x",
+    "easyxml": "0.0.3",
+    "oauth2orize": "0.1.x",
+    "passport": "0.1.X",
+    "passport-local": "0.1.x",
+    "passport-http": "0.2.x",
+    "passport-http-bearer": "0.2.x",
+    "passport-oauth2-client-password": "0.1.x",
+    "connect-ensure-login": "0.1.x",
+    "ejs": "0.8.x",
+    "sendgrid": "0.2.x",
+    "mysql": "2.0.x",
+    "node-uuid": "1.4.x"
+  },
+  "devDependencies": {
+    "vows": "*"
+  },
+  "license": "Evulse",
+  "engines": {
+    "node": "0.8.x",
+    "npm": "1.1.x"
+  }
+}

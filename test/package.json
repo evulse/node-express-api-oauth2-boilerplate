@@ -1,0 +1,28 @@
+{
+  "name": "express-api-boilerplate-test",
+  "version": "0.1.0",
+  "author": "Evulse",
+  "description": "Express REST API boilerplate.",
+  "contributors": [
+    {
+      "name": "Muhammad Ghazali",
+      "email": "muhammadghazali2480@gmail.com"
+    }
+  ],
+  "private": true,
+  "dependencies": {},
+  "devDependencies": {
+    "request": "2.11.x",
+    "vows": "0.6.x",
+    "oauth": "0.9.x",
+    "mysql": "*"
+  },
+  "scripts": {
+    "test": "make test"
+  },
+  "license": "Evulse",
+  "engines": {
+    "node": "0.8.x",
+    "npm":  "1.1.x"
+  }
+}
