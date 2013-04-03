@@ -1,0 +1,11 @@
+machine:
+  environment:
+    NODE_ENV: testing
+
+database:
+  override:
+    - cd test/; mysql -u ubuntu circle_test < eoab_test.sql
+
+test:
+  override:
+    - cd test/; npm install --dev; npm test
