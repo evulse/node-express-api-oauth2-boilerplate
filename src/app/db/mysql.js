@@ -11,25 +11,16 @@ function generateConfig () {
 
   switch (process.env.NODE_ENV) {
     case 'production':
-      return {
-        host: 'localhost',
-        user: '',
-        password: '',
-        database: 'express-api-boilerplate-production'
-      };
+      return process.env.CLEARDB_DATABASE_URL;
       break;
 
     case 'development':
-      if (process.env.CLEARDB_DATABASE_URL) {
-        return process.env.CLEARDB_DATABASE_URL;
-      } else {
-        return {
-          host: 'localhost',
-          user: 'root',
-          password: 'pazzword',
-          database: 'express-api-boilerplate-dev'
-        };
-      }
+      return {
+        host: 'localhost',
+        user: 'root',
+        password: 'pazzword',
+        database: 'express-api-boilerplate-dev'
+      };
       break;
 
     case 'testing':
@@ -65,14 +56,16 @@ module.exports.getConnection = function () {
 
   var connection = mysql.createConnection(generateConfig());
 
-  connection.connect(function (err) {});
+  connection.connect(function (err) {
+  });
 
   connection.on('close', function (err) {
     console.log('SQL CONNECTION CLOSED.');
   });
 
   connection.on('error', function (err) {
-    connection.connect(function (err) {});
+    connection.connect(function (err) {
+    });
   });
 
   module.exports.connection = connection;
