@@ -24,15 +24,15 @@ var server = oauth2orize.createServer();
 // the client by ID from the database.
 
 server.serializeClient(function (client, cb) {
-  return cb(null, client.clientID);
+  cb(null, client.clientID);
 });
 
 server.deserializeClient(function (id, cb) {
   models.clients.findByClientId(id, function (err, client) {
     if (err) {
-      return cb(err);
+      cb(err);
     }
-    return cb(null, client);
+    cb(null, client);
   });
 });
 
@@ -58,7 +58,7 @@ server.grant(oauth2orize.grant.code(function (client, redirectURI, user,
   models.authorizationCodes.save(code, client.clientID, redirectURI, user.id,
     function (err) {
       if (err) {
-        return cb(err);
+        cb(err);
       }
       cb(null, code);
     });
@@ -74,20 +74,20 @@ server.exchange(oauth2orize.exchange.code(function (client, code,
   redirectURI, cb) {
   models.authorizationCodes.find(code, function (err, record) {
     if (err) {
-      return cb(err);
+      cb(err);
     }
     if (client.clientID !== record.clientID) {
-      return cb(null, false);
+      cb(null, false);
     }
     if (redirectURI !== record.redirectURI) {
-      return cb(null, false);
+      cb(null, false);
     }
 
     var token = utils.uid(256);
     models.accessTokens.save(token, record.userID, record.clientID,
       function (err) {
         if (err) {
-          return cb(err);
+          cb(err);
         }
         cb(null, token);
       });
@@ -117,12 +117,12 @@ exports.authorization = [
   server.authorization(function (clientID, redirectURI, cb) {
     models.clients.findByClientId(clientID, function (err, client) {
       if (err) {
-        return cb(err);
+        cb(err);
       }
 
       // check that redirectURI provided by the client matches one registered
       // with the server
-      return cb(null, client, redirectURI);
+      cb(null, client, redirectURI);
     });
   }),
   function (req, res) {
