@@ -4,7 +4,7 @@ machine:
 
 database:
   override:
-    - cd test/; mysql -u ubuntu circle_test < circle_test.sql
+    - cd test/; mysql -u ubuntu circle_test < eoab_test.sql
 
 test:
   override:
