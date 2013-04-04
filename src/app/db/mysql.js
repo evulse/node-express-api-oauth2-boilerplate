@@ -25,8 +25,8 @@ function generateConfig () {
 
     case 'testing':
       // testing configs
-      // mysql are set up to use the ubuntu user, have a database called circle_test
-      // available, and don't require any password.
+      // mysql are set up to use the ubuntu user, have a database called
+      // circle_test available, and don't require any password.
       // https://circleci.com/docs/environment
       return {
         host: 'localhost',
