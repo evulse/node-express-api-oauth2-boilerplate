@@ -17,4 +17,4 @@ env:
 
 before_script:
   - mysql -e 'create database eoab_test;'
-  - cd test/; mysql -u ubuntu circle_test < eoab_test.sql
+  - cd test/; mysql -u root eoab_test < eoab_test.sql
