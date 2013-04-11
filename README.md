@@ -25,7 +25,7 @@ https://evulse.atlassian.net/wiki/display/EOAB/REST+API+Documentation
 
 ## Continuous Integration
 
-This project is setup through CircleCI. Build Status Images will be added soon.
+[![Build Status](https://travis-ci.org/muhammadghazali/node-express-api-oauth2-boilerplate.png?branch=master)](https://travis-ci.org/muhammadghazali/node-express-api-oauth2-boilerplate)
 
 ## Test
 
