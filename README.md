@@ -1,8 +1,6 @@
 Express REST API Boilerplate
 ============================
 
-[![Build Status](https://travis-ci.org/muhammadghazali/node-express-api-oauth2-boilerplate.png?branch=setup-travis-ci)](https://travis-ci.org/muhammadghazali/node-express-api-oauth2-boilerplate)
-
 ## Getting Started
 
 The actual REST API server source code is located under `src/app`. The REST API
@@ -25,7 +23,7 @@ https://evulse.atlassian.net/wiki/display/EOAB/REST+API+Documentation
 
 ## Continuous Integration
 
-This project is setup through CircleCI. Build Status Images will be added soon.
+[![Build Status](https://travis-ci.org/muhammadghazali/node-express-api-oauth2-boilerplate.png?branch=master)](https://travis-ci.org/muhammadghazali/node-express-api-oauth2-boilerplate)
 
 ## Test
 
