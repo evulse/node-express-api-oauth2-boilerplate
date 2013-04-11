@@ -1,6 +1,8 @@
 Express REST API Boilerplate
 ============================
 
+[![Build Status](https://travis-ci.org/muhammadghazali/node-express-api-oauth2-boilerplate.png?branch=master](https://travis-ci.org/muhammadghazali/node-express-api-oauth2-boilerplate)
+
 ## Getting Started
 
 The actual REST API server source code is located under `src/app`. The REST API
