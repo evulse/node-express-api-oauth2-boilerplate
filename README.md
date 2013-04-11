@@ -1,7 +1,7 @@
 Express REST API Boilerplate
 ============================
 
-[![Build Status](https://travis-ci.org/muhammadghazali/node-express-api-oauth2-boilerplate.png?branch=master](https://travis-ci.org/muhammadghazali/node-express-api-oauth2-boilerplate)
+[![Build Status](https://travis-ci.org/muhammadghazali/node-express-api-oauth2-boilerplate.png?branch=setup-travis-ci)](https://travis-ci.org/muhammadghazali/node-express-api-oauth2-boilerplate)
 
 ## Getting Started
 
