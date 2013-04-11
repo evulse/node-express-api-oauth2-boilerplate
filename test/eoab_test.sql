@@ -20,9 +20,9 @@ SET time_zone = "+00:00";
 -- Database: `express-api-boilerplate-dev`
 --
 
-DROP DATABASE IF EXISTS `circle_test`;
-CREATE DATABASE IF NOT EXISTS `circle_test`;
-USE `circle_test`;
+DROP DATABASE IF EXISTS `eoab_test`;
+CREATE DATABASE IF NOT EXISTS `eoab_test`;
+USE `eoab_test`;
 
 -- --------------------------------------------------------
 
