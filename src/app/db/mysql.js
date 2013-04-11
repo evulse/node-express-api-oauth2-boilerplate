@@ -30,9 +30,9 @@ function generateConfig () {
       // https://circleci.com/docs/environment
       return {
         host: 'localhost',
-        user: 'ubuntu',
+        user: 'root',
         password: '',
-        database: 'circle_test'
+        database: 'eoab_test'
       };
       break;
 

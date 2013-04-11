@@ -1,4 +1,3 @@
----
 language: node_js
 node_js:
 - '0.8'
@@ -15,3 +14,7 @@ env:
       GxzNrdC7F5KxlnHN8ro1EBz7wjMTUWrwC+WsizjsELJDYFzEY3PmOVJ6o42S
 
       gnxlHYhiZmgaIdBGlKLDo6ldj4R6zShaanVqn/7gvqTMQRZHBRk='
+
+before_script:
+  - mysql -e 'create database eoab_test;'
+  - cd test/; mysql -u ubuntu circle_test < eoab_test.sql
