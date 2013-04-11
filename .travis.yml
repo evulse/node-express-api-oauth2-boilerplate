@@ -5,9 +5,3 @@ node_js:
 env:
   global:
     - NODE_ENV=testing
-
-# whitelist
-branches:
-  only:
-    - master
-    - /^experiment-.*$/
