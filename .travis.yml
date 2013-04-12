@@ -18,4 +18,4 @@ env:
 before_script:
   - mysql -e 'create database eoab_test;';
   - cd test/; mysql -u root eoab_test < eoab_test.sql
-  - sudo npm install --dev
+  - npm install
