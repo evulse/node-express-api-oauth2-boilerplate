@@ -10,12 +10,11 @@
     }
   ],
   "private": true,
-  "dependencies": {},
-  "devDependencies": {
+  "dependencies": {
     "request": "2.11.x",
     "vows": "0.6.x",
     "oauth": "0.9.x",
-    "mysql": "*"
+    "mysql": "2.0.x"
   },
   "scripts": {
     "test": "make test"
