@@ -1,4 +1,5 @@
 test:
+	pwd
 	npm install
 	mysql -u root -e 'CREATE DATABASE IF NOT EXISTS eoab_test'
 	mysql -u root < eoab_test.sql
