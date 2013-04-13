@@ -21,6 +21,8 @@ before_install:
   - npm install
 
 before_script:
+  - cd $TRAVIS_BUILD_DIR
+  - pwd
   - mysql -e 'create database eoab_test;';
   - mysql -u root eoab_test < test/eoab_test.sql
 
