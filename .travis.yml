@@ -17,6 +17,7 @@ env:
       gnxlHYhiZmgaIdBGlKLDo6ldj4R6zShaanVqn/7gvqTMQRZHBRk='
 
 before_script:
+  - cd src/app; npm install
   - mysql -e 'create database eoab_test;';
   - mysql -u root eoab_test < test/eoab_test.sql
 
