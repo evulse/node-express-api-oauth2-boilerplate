@@ -1,0 +1,70 @@
+{
+  "name": "express-api-boilerplate-test",
+  "version": "0.1.0",
+  "dependencies": {
+    "request": {
+      "version": "2.11.4",
+      "from": "request@2.11.x",
+      "dependencies": {
+        "form-data": {
+          "version": "0.0.3",
+          "from": "form-data",
+          "dependencies": {
+            "combined-stream": {
+              "version": "0.0.3",
+              "from": "combined-stream@0.0.3",
+              "dependencies": {
+                "delayed-stream": {
+                  "version": "0.0.5",
+                  "from": "delayed-stream@0.0.5"
+                }
+              }
+            },
+            "async": {
+              "version": "0.1.9",
+              "from": "async@0.1.9"
+            }
+          }
+        },
+        "mime": {
+          "version": "1.2.7",
+          "from": "mime"
+        }
+      }
+    },
+    "vows": {
+      "version": "0.6.4",
+      "from": "vows@0.6.x",
+      "dependencies": {
+        "eyes": {
+          "version": "0.1.8",
+          "from": "eyes@>=0.1.6"
+        },
+        "diff": {
+          "version": "1.0.4",
+          "from": "diff@~1.0.3"
+        }
+      }
+    },
+    "oauth": {
+      "version": "0.9.10",
+      "from": "oauth@0.9.x"
+    },
+    "mysql": {
+      "version": "2.0.0-alpha7",
+      "from": "mysql@2.0.x",
+      "dependencies": {
+        "require-all": {
+          "version": "0.0.3",
+          "from": "require-all@0.0.3",
+          "resolved": "https://registry.npmjs.org/require-all/-/require-all-0.0.3.tgz"
+        },
+        "bignumber.js": {
+          "version": "1.0.1",
+          "from": "bignumber.js@1.0.1",
+          "resolved": "https://registry.npmjs.org/bignumber.js/-/bignumber.js-1.0.1.tgz"
+        }
+      }
+    }
+  }
+}

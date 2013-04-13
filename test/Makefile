@@ -1,5 +1,6 @@
 test:
-	npm install --dev
+	pwd
+	npm install
 	mysql -u root -e 'CREATE DATABASE IF NOT EXISTS eoab_test'
 	mysql -u root < eoab_test.sql
 	node_modules/vows/bin/vows unit-test/*-spec.js
